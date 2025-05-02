@@ -12,27 +12,6 @@ My Bourbon Collection is a comprehensive bourbon collection management app that 
 - `privacy-policy.html` - Privacy Policy
 - `terms.html` - Terms of Service
 
-## Setup
-
-This website is hosted on GitHub Pages. To set up:
-
-1. Create a new GitHub repository named `my-bourbon-collection`
-2. Push these files to the repository
-3. Enable GitHub Pages in the repository settings:
-   - Go to Settings > Pages
-   - Select 'main' branch as source
-   - Choose a custom domain if desired
-4. The website will be available at `https://wood40202.github.io/my-bourbon-collection`
-
-## Customization
-
-Before publishing:
-
-1. Update the contact email address in both privacy-policy.html and terms.html
-2. Add your app icon as `app-icon.png`
-3. Update the App Store link in index.html once your app is published
-4. Update the copyright year if needed
-5. Update any wood40202 LLC specific information
 
 ## Business Information
 
