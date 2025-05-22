@@ -13,7 +13,6 @@ enum TastingType: String, CaseIterable {
     case neat = "Neat"
     case rocks = "Rocks"
     case splash = "Splash"
-    case cocktail = "Cocktail"
     case flight = "Flight"
 }
 
@@ -26,6 +25,7 @@ class AddTastingViewController: UIViewController, CLLocationManagerDelegate, UIT
     let imagePickerButton = UIButton(type: .system)
     let cameraButton = UIButton(type: .system)
     let buttonStackView = UIStackView()
+    let nameTextField = UITextField()
     let proofTextField = UITextField()
     let abvTextField = UITextField()
     let ageTextField = UITextField()
@@ -35,23 +35,23 @@ class AddTastingViewController: UIViewController, CLLocationManagerDelegate, UIT
     let pourPriceTextField = UITextField()
     let tastingDatePicker = UIDatePicker()
     let tastingDateLabel = UILabel()
-    let tastingTypeLabel = UILabel()
     let tastingTypePicker = UIPickerView()
-    let additionalDetailsTextField = UITextField()
-    let ratingSegmentedControl = UISegmentedControl(items: ["👎", "👌", "👍"])
-    let ratingLabel = UILabel()
-    
-    private let fieldsStackView = UIStackView()
-    private var currentNameField: UITextField?
-    private var currentAdditionalDetailsField: UITextField?
+    let tastingTypeLabel = UILabel()
     
     var selectedImage: UIImage?
     var imageFilename: String?
-    private var selectedTastingType: TastingType = .neat
     
     private var locationManager = CLLocationManager()
     private var selectedLocation: LocationOption?
     private var currentLocation: CLLocation?
+    private var selectedTastingType: TastingType = .neat
+    
+    private let nameFieldContainer = UIView()
+    private let additionalDetailsContainer = UIView()
+    
+    private var currentNameField: UITextField?
+    private var currentAdditionalDetailsField: UITextField?
+    private var fieldsStackView = UIStackView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -64,72 +64,43 @@ class AddTastingViewController: UIViewController, CLLocationManagerDelegate, UIT
         print("AddTastingViewController: Setup complete")
     }
     
-    private func setupTastingTypePicker() {
-        tastingTypePicker.delegate = self
-        tastingTypePicker.dataSource = self
-        
-        // Set initial state to neat
-        selectedTastingType = .neat
-        updateFieldsForCurrentType()
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print("AddTastingViewController: viewWillAppear")
+        print("AddTastingViewController: nameTextField placeholder: \(String(describing: nameTextField.placeholder))")
+        print("AddTastingViewController: additionalDetailsTextField isHidden: \(additionalDetailsTextField.isHidden)")
     }
     
-    private func updateFieldsForCurrentType() {
-        print("AddTastingViewController: Updating fields for type: \(selectedTastingType)")
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        print("AddTastingViewController: viewDidAppear")
+        print("AddTastingViewController: nameTextField placeholder: \(String(describing: nameTextField.placeholder))")
         
-        // Remove existing fields
-        fieldsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        currentNameField = nil
-        currentAdditionalDetailsField = nil
-        
-        // Create name field
-        let nameField = UITextField()
-        nameField.borderStyle = .roundedRect
-        nameField.delegate = self
-        nameField.autocapitalizationType = .words
-        nameField.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Set placeholder based on tasting type
-        switch selectedTastingType {
-        case .cocktail:
-            nameField.placeholder = "Cocktail Name *"
-        case .flight:
-            nameField.placeholder = "Name"
-        default:
-            nameField.placeholder = "Bourbon Name *"
+        // Ensure initial state is set
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.selectedTastingType = .neat
+            self.updateFieldsForCurrentType()
+            self.tastingTypePicker.selectRow(0, inComponent: 0, animated: false)
         }
-        
-        fieldsStackView.addArrangedSubview(nameField)
-        currentNameField = nameField
-        
-        // Add additional fields based on tasting type
-        switch selectedTastingType {
-        case .cocktail:
-            let detailsField = UITextField()
-            detailsField.placeholder = "Bourbon Used *"
-            detailsField.borderStyle = .roundedRect
-            detailsField.delegate = self
-            detailsField.translatesAutoresizingMaskIntoConstraints = false
-            fieldsStackView.addArrangedSubview(detailsField)
-            currentAdditionalDetailsField = detailsField
-            
-        case .flight:
-            let detailsField = UITextField()
-            detailsField.placeholder = "Flight Details *"
-            detailsField.borderStyle = .roundedRect
-            detailsField.delegate = self
-            detailsField.translatesAutoresizingMaskIntoConstraints = false
-            fieldsStackView.addArrangedSubview(detailsField)
-            currentAdditionalDetailsField = detailsField
-            
-        default:
-            break
-        }
-        
-        // Force layout update
-        view.layoutIfNeeded()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        print("AddTastingViewController: viewWillDisappear")
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        print("AddTastingViewController: viewDidDisappear")
+    }
+    
+    deinit {
+        print("AddTastingViewController: deinit")
     }
     
     private func setupUI() {
+        print("AddTastingViewController: setupUI")
         view.backgroundColor = .systemBackground
         
         // Scroll View
@@ -149,12 +120,6 @@ class AddTastingViewController: UIViewController, CLLocationManagerDelegate, UIT
         buttonStackView.spacing = 16
         buttonStackView.distribution = .fillEqually
         contentView.addSubview(buttonStackView)
-        
-        // Fields Stack View
-        fieldsStackView.axis = .vertical
-        fieldsStackView.spacing = 16
-        fieldsStackView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(fieldsStackView)
         
         // Image Picker Button
         imagePickerButton.setTitle("Choose Photo", for: .normal)
@@ -177,16 +142,20 @@ class AddTastingViewController: UIViewController, CLLocationManagerDelegate, UIT
         contentView.addSubview(tastingTypeLabel)
         
         // Tasting Type Picker
+        tastingTypePicker.delegate = self
+        tastingTypePicker.dataSource = self
         contentView.addSubview(tastingTypePicker)
         
-        // Additional Details Text Field
-        setupTextField(additionalDetailsTextField, placeholder: "Additional Details")
-        additionalDetailsTextField.isHidden = true
+        // Fields Stack View
+        fieldsStackView.axis = .vertical
+        fieldsStackView.spacing = 16
+        fieldsStackView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.addSubview(fieldsStackView)
         
-        // Text Fields
-        setupTextField(proofTextField, placeholder: "Proof", keyboardType: .decimalPad)
+        // Other Text Fields
+        setupTextField(proofTextField, placeholder: "Proof *", keyboardType: .decimalPad)
         setupTextField(abvTextField, placeholder: "ABV", keyboardType: .decimalPad)
-        setupTextField(ageTextField, placeholder: "Age", keyboardType: .numberPad)
+        setupTextField(ageTextField, placeholder: "Age (years)", keyboardType: .numberPad)
         setupTextField(tastingLocationTextField, placeholder: "Tasting Location")
         setupTextField(flavorProfileTextField, placeholder: "Flavor Profile")
         setupTextField(pourPriceTextField, placeholder: "Pour Price", keyboardType: .decimalPad)
@@ -211,18 +180,11 @@ class AddTastingViewController: UIViewController, CLLocationManagerDelegate, UIT
         notesTextView.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         contentView.addSubview(notesTextView)
         
-        // Rating Label
-        ratingLabel.text = "Rating"
-        ratingLabel.font = .systemFont(ofSize: 16)
-        ratingLabel.textColor = .label
-        contentView.addSubview(ratingLabel)
-        
-        // Rating Segmented Control
-        ratingSegmentedControl.selectedSegmentIndex = 0
-        ratingSegmentedControl.translatesAutoresizingMaskIntoConstraints = false
-        contentView.addSubview(ratingSegmentedControl)
-        
         setupConstraints()
+        
+        // Set initial state
+        selectedTastingType = .neat
+        updateFieldsForCurrentType()
     }
     
     private func setupTextField(_ textField: UITextField, placeholder: String, keyboardType: UIKeyboardType = .default) {
@@ -233,7 +195,7 @@ class AddTastingViewController: UIViewController, CLLocationManagerDelegate, UIT
         contentView.addSubview(textField)
         
         // Set autocapitalization for name and location fields
-        if placeholder == "Name *" || placeholder == "Tasting Location" {
+        if placeholder == "Name" || placeholder == "Tasting Location" {
             textField.autocapitalizationType = .words
         }
         
@@ -243,16 +205,87 @@ class AddTastingViewController: UIViewController, CLLocationManagerDelegate, UIT
         }
     }
     
+    private func setupConstraints() {
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        buttonStackView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        nameTextField.translatesAutoresizingMaskIntoConstraints = false
+        proofTextField.translatesAutoresizingMaskIntoConstraints = false
+        abvTextField.translatesAutoresizingMaskIntoConstraints = false
+        ageTextField.translatesAutoresizingMaskIntoConstraints = false
+        tastingLocationTextField.translatesAutoresizingMaskIntoConstraints = false
+        flavorProfileTextField.translatesAutoresizingMaskIntoConstraints = false
+        pourPriceTextField.translatesAutoresizingMaskIntoConstraints = false
+        tastingDateLabel.translatesAutoresizingMaskIntoConstraints = false
+        tastingDatePicker.translatesAutoresizingMaskIntoConstraints = false
+        notesTextView.translatesAutoresizingMaskIntoConstraints = false
+        tastingTypePicker.translatesAutoresizingMaskIntoConstraints = false
+        tastingTypeLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            
+            imageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
+            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            imageView.heightAnchor.constraint(equalToConstant: 200),
+            
+            buttonStackView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 16),
+            buttonStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            buttonStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            
+            tastingTypeLabel.topAnchor.constraint(equalTo: buttonStackView.bottomAnchor, constant: 16),
+            tastingTypeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            
+            tastingTypePicker.topAnchor.constraint(equalTo: tastingTypeLabel.bottomAnchor, constant: 8),
+            tastingTypePicker.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            tastingTypePicker.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            tastingTypePicker.heightAnchor.constraint(equalToConstant: 120),
+            
+            fieldsStackView.topAnchor.constraint(equalTo: tastingTypePicker.bottomAnchor, constant: 16),
+            fieldsStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            fieldsStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            
+            tastingDateLabel.topAnchor.constraint(equalTo: fieldsStackView.bottomAnchor, constant: 16),
+            tastingDateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            
+            tastingDatePicker.topAnchor.constraint(equalTo: tastingDateLabel.bottomAnchor, constant: 8),
+            tastingDatePicker.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            tastingDatePicker.heightAnchor.constraint(equalToConstant: 44),
+            
+            notesTextView.topAnchor.constraint(equalTo: tastingDatePicker.bottomAnchor, constant: 16),
+            notesTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            notesTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            notesTextView.heightAnchor.constraint(equalToConstant: 100),
+            notesTextView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
+        ])
+    }
+    
     private func setupNavigationBar() {
         title = "Add Tasting"
-        
-        // Save button
-        let saveButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveTasting))
-        navigationItem.rightBarButtonItem = saveButton
         
         // Cancel button
         let cancelButton = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(cancel))
         navigationItem.leftBarButtonItem = cancelButton
+        
+        // Save button
+        let saveButton = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveTasting))
+        navigationItem.rightBarButtonItem = saveButton
+    }
+    
+    private func setupKeyboardHandling() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     private func setupLocationServices() {
@@ -283,133 +316,8 @@ class AddTastingViewController: UIViewController, CLLocationManagerDelegate, UIT
         }
     }
     
-    @objc private func useCurrentLocation() {
-        print("AddTastingViewController: useCurrentLocation called")
-        LocationService.shared.getCurrentLocation { [weak self] location in
-            if let location = location {
-                print("AddTastingViewController: Got current location: \(location.coordinate)")
-                self?.updateLocationField(with: location)
-            } else {
-                print("AddTastingViewController: No location available")
-            }
-        }
-    }
-    
-    private func setupConstraints() {
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        contentView.translatesAutoresizingMaskIntoConstraints = false
-        buttonStackView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        proofTextField.translatesAutoresizingMaskIntoConstraints = false
-        abvTextField.translatesAutoresizingMaskIntoConstraints = false
-        ageTextField.translatesAutoresizingMaskIntoConstraints = false
-        tastingLocationTextField.translatesAutoresizingMaskIntoConstraints = false
-        flavorProfileTextField.translatesAutoresizingMaskIntoConstraints = false
-        pourPriceTextField.translatesAutoresizingMaskIntoConstraints = false
-        tastingDateLabel.translatesAutoresizingMaskIntoConstraints = false
-        tastingDatePicker.translatesAutoresizingMaskIntoConstraints = false
-        notesTextView.translatesAutoresizingMaskIntoConstraints = false
-        tastingTypeLabel.translatesAutoresizingMaskIntoConstraints = false
-        tastingTypePicker.translatesAutoresizingMaskIntoConstraints = false
-        additionalDetailsTextField.translatesAutoresizingMaskIntoConstraints = false
-        ratingLabel.translatesAutoresizingMaskIntoConstraints = false
-        ratingSegmentedControl.translatesAutoresizingMaskIntoConstraints = false
-        fieldsStackView.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            
-            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
-            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
-            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
-            
-            imageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
-            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            imageView.heightAnchor.constraint(equalToConstant: 200),
-            
-            buttonStackView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 16),
-            buttonStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            buttonStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            
-            tastingTypeLabel.topAnchor.constraint(equalTo: buttonStackView.bottomAnchor, constant: 16),
-            tastingTypeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            
-            tastingTypePicker.topAnchor.constraint(equalTo: tastingTypeLabel.bottomAnchor, constant: 8),
-            tastingTypePicker.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            tastingTypePicker.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            tastingTypePicker.heightAnchor.constraint(equalToConstant: 120),
-            
-            fieldsStackView.topAnchor.constraint(equalTo: tastingTypePicker.bottomAnchor, constant: 16),
-            fieldsStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            fieldsStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            
-            additionalDetailsTextField.topAnchor.constraint(equalTo: fieldsStackView.bottomAnchor, constant: 16),
-            additionalDetailsTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            additionalDetailsTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            additionalDetailsTextField.heightAnchor.constraint(equalToConstant: 44),
-            
-            proofTextField.topAnchor.constraint(equalTo: fieldsStackView.bottomAnchor, constant: 16),
-            proofTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            proofTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            proofTextField.heightAnchor.constraint(equalToConstant: 44),
-            
-            abvTextField.topAnchor.constraint(equalTo: proofTextField.bottomAnchor, constant: 16),
-            abvTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            abvTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            abvTextField.heightAnchor.constraint(equalToConstant: 44),
-            
-            ageTextField.topAnchor.constraint(equalTo: abvTextField.bottomAnchor, constant: 16),
-            ageTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            ageTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            ageTextField.heightAnchor.constraint(equalToConstant: 44),
-            
-            tastingLocationTextField.topAnchor.constraint(equalTo: ageTextField.bottomAnchor, constant: 16),
-            tastingLocationTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            tastingLocationTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            tastingLocationTextField.heightAnchor.constraint(equalToConstant: 44),
-            
-            flavorProfileTextField.topAnchor.constraint(equalTo: tastingLocationTextField.bottomAnchor, constant: 16),
-            flavorProfileTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            flavorProfileTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            flavorProfileTextField.heightAnchor.constraint(equalToConstant: 44),
-            
-            pourPriceTextField.topAnchor.constraint(equalTo: flavorProfileTextField.bottomAnchor, constant: 16),
-            pourPriceTextField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            pourPriceTextField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            pourPriceTextField.heightAnchor.constraint(equalToConstant: 44),
-            
-            ratingLabel.topAnchor.constraint(equalTo: pourPriceTextField.bottomAnchor, constant: 16),
-            ratingLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            
-            ratingSegmentedControl.topAnchor.constraint(equalTo: ratingLabel.bottomAnchor, constant: 8),
-            ratingSegmentedControl.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            ratingSegmentedControl.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            ratingSegmentedControl.heightAnchor.constraint(equalToConstant: 44),
-            
-            tastingDateLabel.topAnchor.constraint(equalTo: ratingSegmentedControl.bottomAnchor, constant: 16),
-            tastingDateLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            
-            tastingDatePicker.topAnchor.constraint(equalTo: tastingDateLabel.bottomAnchor, constant: 8),
-            tastingDatePicker.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            tastingDatePicker.heightAnchor.constraint(equalToConstant: 44),
-            
-            notesTextView.topAnchor.constraint(equalTo: tastingDatePicker.bottomAnchor, constant: 16),
-            notesTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            notesTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-            notesTextView.heightAnchor.constraint(equalToConstant: 100),
-            notesTextView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
-        ])
-    }
-    
-    private func setupKeyboardHandling() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    private func setupTastingTypePicker() {
+        // Implementation of setupTastingTypePicker method
     }
     
     @objc private func keyboardWillShow(notification: NSNotification) {
@@ -437,14 +345,13 @@ class AddTastingViewController: UIViewController, CLLocationManagerDelegate, UIT
     }
     
     @objc private func tastingDateChanged() {
-        // Handle date change if needed
+        // Update UI if needed
     }
     
-    @objc private func showLocationSelection() {
-        let locationVC = LocationSelectionViewController()
-        locationVC.delegate = self
-        let navController = UINavigationController(rootViewController: locationVC)
-        present(navController, animated: true)
+    @objc private func useCurrentLocation() {
+        print("AddTastingViewController: useCurrentLocation called")
+        locationManager.requestWhenInUseAuthorization()
+        locationManager.startUpdatingLocation()
     }
     
     @objc private func selectImage() {
@@ -470,62 +377,61 @@ class AddTastingViewController: UIViewController, CLLocationManagerDelegate, UIT
         let additionalDetails = currentAdditionalDetailsField?.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         print("AddTastingViewController: Name: \(name), Additional Details: \(additionalDetails)")
         
-        // Validate required fields based on tasting type
-        switch selectedTastingType {
-        case .cocktail:
-            guard !name.isEmpty else {
-                print("AddTastingViewController: Cocktail name missing")
-                showErrorAlert(message: "Please enter a cocktail name")
-                return
-            }
-            guard !additionalDetails.isEmpty else {
-                print("AddTastingViewController: Cocktail ingredients missing")
-                showErrorAlert(message: "Please enter the cocktail ingredients")
-                return
-            }
-        case .flight:
-            guard !additionalDetails.isEmpty else {
-                print("AddTastingViewController: Flight details missing")
-                showErrorAlert(message: "Please enter the bourbons in your flight")
-                return
-            }
-        default:
-            guard !name.isEmpty else {
-                print("AddTastingViewController: Name missing")
-                showErrorAlert(message: "Please enter a name for the tasting")
-                return
-            }
+        // Validate required fields
+        guard !name.isEmpty else {
+            print("AddTastingViewController: Name missing")
+            showErrorAlert(message: "Please enter a name for the tasting")
+            return
+        }
+        
+        if selectedTastingType == .flight && additionalDetails.isEmpty {
+            print("AddTastingViewController: Flight details missing")
+            showErrorAlert(message: "Please enter the bourbons in your flight")
+            return
         }
         
         // Get optional fields
         let proof = Double(proofTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "") ?? 0.0
-        let age = ageTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+        let age = Int(ageTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "") ?? 0
         let tastingLocation = tastingLocationTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         let flavorProfile = flavorProfileTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         let notes = notesTextView.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
         let pourPrice = Double(pourPriceTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) ?? "") ?? 0.0
-        
-        // Get rating from segmented control
-        let rating = ratingSegmentedControl.selectedSegmentIndex + 1
+        print("AddTastingViewController: Fields - Proof: \(proof), Age: \(age), Location: \(tastingLocation), Price: \(pourPrice)")
         
         // Get tasting type
         let tastingType = selectedTastingType.rawValue
+        print("AddTastingViewController: Tasting type: \(tastingType)")
         
         // Handle image
+        print("AddTastingViewController: Handling image")
         let imageFilename: String
         if let image = selectedImage {
-            imageFilename = "tasting_\(UUID().uuidString).jpg"
-            if !BourbonDatabase.shared.saveImage(image, filename: imageFilename) {
+            print("AddTastingViewController: Saving selected image")
+            let filename = "tasting_\(UUID().uuidString).jpg"
+            if BourbonDatabase.shared.saveImage(image, filename: filename) {
+                print("AddTastingViewController: Successfully saved image as \(filename)")
+                imageFilename = filename
+            } else {
+                print("AddTastingViewController: Failed to save image")
                 showErrorAlert(message: "Failed to save image")
                 return
             }
         } else {
-            imageFilename = "default_tasting.jpg"
+            print("AddTastingViewController: Using default image")
+            let filename = "default_tasting.jpg"
             if let defaultImage = UIImage(named: "placeholder") {
-                if !BourbonDatabase.shared.saveImage(defaultImage, filename: imageFilename) {
+                if BourbonDatabase.shared.saveImage(defaultImage, filename: filename) {
+                    print("AddTastingViewController: Successfully saved default image")
+                    imageFilename = filename
+                } else {
+                    print("AddTastingViewController: Failed to save default image")
                     showErrorAlert(message: "Failed to save default image")
                     return
                 }
+            } else {
+                print("AddTastingViewController: No default image available, using filename only")
+                imageFilename = "default_tasting.jpg"
             }
         }
         
@@ -534,13 +440,17 @@ class AddTastingViewController: UIViewController, CLLocationManagerDelegate, UIT
         var tastingLocationLongitude: Double?
         
         if let location = LocationService.shared.currentLocation {
+            print("AddTastingViewController: Using current location: \(location.coordinate)")
             tastingLocationLatitude = location.coordinate.latitude
             tastingLocationLongitude = location.coordinate.longitude
+        } else {
+            print("AddTastingViewController: No location available")
         }
         
         // Create tasting object
+        print("AddTastingViewController: Creating tasting object")
         let tasting = Bourbon(
-            name: selectedTastingType == .flight ? "Flight" : name,
+            name: name,
             proof: proof,
             age: age,
             purchaseDate: tastingDatePicker.date,
@@ -548,29 +458,33 @@ class AddTastingViewController: UIViewController, CLLocationManagerDelegate, UIT
             purchaseLocationLatitude: tastingLocationLatitude,
             purchaseLocationLongitude: tastingLocationLongitude,
             flavorProfile: flavorProfile,
-            notes: notes + (additionalDetails.isEmpty ? "" : "\n\nTasting Type: \(tastingType)" + 
-                (selectedTastingType == .cocktail ? "\nBourbon Used: \(additionalDetails)" : 
-                 selectedTastingType == .flight ? "\nFlight Details: \(additionalDetails)" : "")),
+            notes: notes + (additionalDetails.isEmpty ? "" : "\n\nTasting Type: \(tastingType)" + (additionalDetails.isEmpty ? "" : "\nFlight Details: \(additionalDetails)")),
             price: pourPrice,
             size: "Tasting",
             imageFilename: imageFilename,
-            rating: rating,
+            rating: 0,
             fillLevel: 0
         )
         
         // Save to database
+        print("AddTastingViewController: Saving to database")
         let tastingId = BourbonDatabase.shared.addBourbon(tasting)
         
         if tastingId > 0 {
+            print("AddTastingViewController: Successfully saved tasting with ID: \(tastingId)")
             // Notify delegate
+            print("AddTastingViewController: Notifying delegate")
             delegate?.addTastingViewControllerDidAddTasting(self)
             
             // Post notification
+            print("AddTastingViewController: Posting notification")
             NotificationCenter.default.post(name: .bourbonCollectionDidChange, object: nil)
             
             // Dismiss view controller
+            print("AddTastingViewController: Dismissing view controller")
             dismiss(animated: true)
         } else {
+            print("AddTastingViewController: Failed to save tasting")
             showErrorAlert(message: "Failed to save tasting. Please try again.")
         }
     }
@@ -583,6 +497,39 @@ class AddTastingViewController: UIViewController, CLLocationManagerDelegate, UIT
         let alert = UIAlertController(title: "Error", message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default))
         present(alert, animated: true)
+    }
+    
+    private func updateFieldsForCurrentType() {
+        print("AddTastingViewController: Updating fields for type: \(selectedTastingType)")
+        
+        // Remove existing fields
+        fieldsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        currentNameField = nil
+        currentAdditionalDetailsField = nil
+        
+        // Create name field
+        let nameField = UITextField()
+        nameField.borderStyle = .roundedRect
+        nameField.delegate = self
+        nameField.autocapitalizationType = .words
+        nameField.translatesAutoresizingMaskIntoConstraints = false
+        nameField.placeholder = "Name *"
+        fieldsStackView.addArrangedSubview(nameField)
+        currentNameField = nameField
+        
+        // Add additional details field for flight tastings only
+        if selectedTastingType == .flight {
+            let detailsField = UITextField()
+            detailsField.placeholder = "Flight Details *"
+            detailsField.borderStyle = .roundedRect
+            detailsField.delegate = self
+            detailsField.translatesAutoresizingMaskIntoConstraints = false
+            fieldsStackView.addArrangedSubview(detailsField)
+            currentAdditionalDetailsField = detailsField
+        }
+        
+        // Force layout update
+        view.layoutIfNeeded()
     }
     
     private func updateLocationField(with location: CLLocation) {
@@ -636,12 +583,17 @@ class AddTastingViewController: UIViewController, CLLocationManagerDelegate, UIT
 
 extension AddTastingViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        picker.dismiss(animated: true)
-        
         if let image = info[.editedImage] as? UIImage ?? info[.originalImage] as? UIImage {
             selectedImage = image
             imageView.image = image
+            
+            // Save the image
+            if let filename = ImageService.shared.saveImage(image) {
+                imageFilename = filename
+            }
         }
+        
+        picker.dismiss(animated: true)
     }
 }
 
@@ -651,8 +603,8 @@ extension AddTastingViewController: CustomCameraViewControllerDelegate {
         imageView.image = image
         
         // Save the image
-        if BourbonDatabase.shared.saveImage(image, filename: "tasting_\(UUID().uuidString).jpg") {
-            imageFilename = "tasting_\(UUID().uuidString).jpg"
+        if let filename = ImageService.shared.saveImage(image) {
+            imageFilename = filename
         }
         
         controller.dismiss(animated: true)
@@ -664,8 +616,10 @@ extension AddTastingViewController: CustomCameraViewControllerDelegate {
 }
 
 extension AddTastingViewController: UIPickerViewDelegate, UIPickerViewDataSource {
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        print("AddTastingViewController: pickerView didSelectRow: \(row)")
+        selectedTastingType = TastingType.allCases[row]
+        updateFieldsForCurrentType()
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
@@ -676,18 +630,7 @@ extension AddTastingViewController: UIPickerViewDelegate, UIPickerViewDataSource
         return TastingType.allCases[row].rawValue
     }
     
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        selectedTastingType = TastingType.allCases[row]
-        
-        // Update fields based on tasting type
-        updateFieldsForCurrentType()
-    }
-}
-
-extension AddTastingViewController: LocationSelectionViewControllerDelegate {
-    func locationSelectionViewController(_ controller: LocationSelectionViewController, didSelectLocation location: LocationOption) {
-        tastingLocationTextField.text = location.name
-        selectedLocation = location
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
     }
 } 
- 

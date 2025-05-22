@@ -11,7 +11,6 @@ protocol EditBourbonViewControllerDelegate: AnyObject {
 class EditBourbonViewController: AddBourbonViewController {
     weak var editDelegate: EditBourbonViewControllerDelegate?
     private let bourbon: Bourbon
-    private var editImageButton: UIButton?
     
     init(bourbon: Bourbon) {
         self.bourbon = bourbon
@@ -39,71 +38,62 @@ class EditBourbonViewController: AddBourbonViewController {
             fillLevelSlider.isHidden = true
             emptyLabel.isHidden = true
             fullLabel.isHidden = true
-            
-            // Adjust rating control position to be right after purchase date picker
-            ratingSegmentedControl.removeFromSuperview()
-            contentView.addSubview(ratingSegmentedControl)
-            
-            NSLayoutConstraint.activate([
-                ratingSegmentedControl.topAnchor.constraint(equalTo: purchaseDatePicker.bottomAnchor, constant: 16),
-                ratingSegmentedControl.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-                ratingSegmentedControl.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-                ratingSegmentedControl.heightAnchor.constraint(equalToConstant: 44)
-            ])
-            
-            // Adjust notes position to be right after rating control
-            notesTextView.removeFromSuperview()
-            contentView.addSubview(notesTextView)
-            
-            NSLayoutConstraint.activate([
-                notesTextView.topAnchor.constraint(equalTo: ratingSegmentedControl.bottomAnchor, constant: 16),
-                notesTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-                notesTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
-                notesTextView.heightAnchor.constraint(equalToConstant: 100),
-                notesTextView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
-            ])
         }
-        
-        // Ensure image view is properly configured
-        imageView.contentMode = .scaleAspectFit
-        imageView.backgroundColor = .systemGray6
-        imageView.layer.cornerRadius = 8
-        imageView.clipsToBounds = true
         
         populateFields()
         setupLocationServices()
     }
     
     private func populateFields() {
-        // Load existing image if available
-        let imageFilename = bourbon.imageFilename
-        if !imageFilename.isEmpty {
-            if let image = ImageService.shared.loadImage(filename: imageFilename) {
-                selectedImage = image
-                imageView.image = image
-            } else {
-                imageView.image = UIImage(named: "placeholder")
-            }
-        } else {
-            imageView.image = UIImage(named: "placeholder")
-        }
-        
-        // Populate other fields
         nameTextField.text = bourbon.name
         proofTextField.text = String(bourbon.proof)
-        ageTextField.text = bourbon.age.isEmpty ? "" : bourbon.age
+        abvTextField.text = String(format: "%.1f%%", Double(bourbon.proof) / 2.0)
+        ageTextField.text = String(bourbon.age)
         purchaseLocationTextField.text = bourbon.purchaseLocation
         flavorProfileTextField.text = bourbon.flavorProfile
         notesTextView.text = bourbon.notes
-        priceTextField.text = bourbon.price > 0 ? String(format: "%.2f", bourbon.price) : ""
+        priceTextField.text = String(format: "%.2f", bourbon.price)
         sizeTextField.text = bourbon.size
-        purchaseDatePicker.date = bourbon.purchaseDate
-        dateOpenedPicker.date = bourbon.dateOpened ?? Date()
-        selectedDateOpened = bourbon.dateOpened
         selectedRating = bourbon.rating
-        ratingSegmentedControl.selectedSegmentIndex = bourbon.rating
-        fillLevelSlider.value = Float(bourbon.fillLevel)
-        updateFillLevelLabel()
+        ratingSegmentedControl.selectedSegmentIndex = bourbon.rating - 1
+        
+        if let dateOpened = bourbon.dateOpened {
+            dateOpenedPicker.date = dateOpened
+            selectedDateOpened = dateOpened
+        }
+        
+        if let dateEmptied = bourbon.dateEmptied {
+            dateEmptiedPicker.date = dateEmptied
+            selectedDateEmptied = dateEmptied
+        }
+        
+        // Set up size picker
+        sizeTextField.inputView = sizePicker
+        sizePicker.delegate = self
+        sizePicker.dataSource = self
+        
+        // Add a toolbar with a "Done" button to dismiss the picker
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTapped))
+        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        toolbar.items = [flexSpace, doneButton]
+        sizeTextField.inputAccessoryView = toolbar
+        
+        // Set the size text and selected size
+        sizeTextField.text = bourbon.size
+        selectedSize = bourbon.size
+        if let index = sizes.firstIndex(of: bourbon.size) {
+            sizePicker.selectRow(index, inComponent: 0, animated: false)
+        }
+        
+        purchaseDatePicker.date = bourbon.purchaseDate
+        
+        // Load existing image
+        if let image = ImageService.shared.loadImage(filename: bourbon.imageFilename) {
+            selectedImage = image
+            imageView.image = image
+        }
     }
     
     private func setupLocationServices() {
