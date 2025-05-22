@@ -148,27 +148,30 @@ class AddTastingViewController: UIViewController, CLLocationManagerDelegate, UIT
         buttonStackView.axis = .horizontal
         buttonStackView.spacing = 16
         buttonStackView.distribution = .fillEqually
+        buttonStackView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(buttonStackView)
+        
+        // Choose Photo Button
+        imagePickerButton.setTitle("Choose Photo", for: .normal)
+        imagePickerButton.setImage(UIImage(systemName: "photo"), for: .normal)
+        imagePickerButton.tintColor = .systemBlue
+        imagePickerButton.addTarget(self, action: #selector(selectImage), for: .touchUpInside)
+        imagePickerButton.translatesAutoresizingMaskIntoConstraints = false
+        buttonStackView.addArrangedSubview(imagePickerButton)
+        
+        // Take Photo Button
+        cameraButton.setTitle("Take Photo", for: .normal)
+        cameraButton.setImage(UIImage(systemName: "camera"), for: .normal)
+        cameraButton.tintColor = .systemBlue
+        cameraButton.addTarget(self, action: #selector(takePhoto), for: .touchUpInside)
+        cameraButton.translatesAutoresizingMaskIntoConstraints = false
+        buttonStackView.addArrangedSubview(cameraButton)
         
         // Fields Stack View
         fieldsStackView.axis = .vertical
         fieldsStackView.spacing = 16
         fieldsStackView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(fieldsStackView)
-        
-        // Image Picker Button
-        imagePickerButton.setTitle("Choose Photo", for: .normal)
-        imagePickerButton.setImage(UIImage(systemName: "photo"), for: .normal)
-        imagePickerButton.tintColor = .systemBlue
-        imagePickerButton.addTarget(self, action: #selector(selectImage), for: .touchUpInside)
-        buttonStackView.addArrangedSubview(imagePickerButton)
-        
-        // Camera Button
-        cameraButton.setTitle("Take Photo", for: .normal)
-        cameraButton.setImage(UIImage(systemName: "camera"), for: .normal)
-        cameraButton.tintColor = .systemBlue
-        cameraButton.addTarget(self, action: #selector(takePhoto), for: .touchUpInside)
-        buttonStackView.addArrangedSubview(cameraButton)
         
         // Tasting Type Label
         tastingTypeLabel.text = "Tasting Type"
@@ -336,6 +339,7 @@ class AddTastingViewController: UIViewController, CLLocationManagerDelegate, UIT
             buttonStackView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 16),
             buttonStackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
             buttonStackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            buttonStackView.heightAnchor.constraint(equalToConstant: 44),
             
             tastingTypeLabel.topAnchor.constraint(equalTo: buttonStackView.bottomAnchor, constant: 16),
             tastingTypeLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
@@ -452,15 +456,15 @@ class AddTastingViewController: UIViewController, CLLocationManagerDelegate, UIT
         picker.sourceType = .photoLibrary
         picker.delegate = self
         picker.allowsEditing = true
-        picker.modalPresentationStyle = .fullScreen
         present(picker, animated: true)
     }
     
     @objc private func takePhoto() {
-        let cameraVC = CustomCameraViewController()
-        cameraVC.delegate = self
-        cameraVC.modalPresentationStyle = .fullScreen
-        present(cameraVC, animated: true)
+        let picker = UIImagePickerController()
+        picker.sourceType = .camera
+        picker.delegate = self
+        picker.allowsEditing = true
+        present(picker, animated: true)
     }
     
     @objc private func saveTasting() {
@@ -635,6 +639,10 @@ class AddTastingViewController: UIViewController, CLLocationManagerDelegate, UIT
 }
 
 extension AddTastingViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true)
+    }
+    
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         picker.dismiss(animated: true)
         
@@ -642,24 +650,6 @@ extension AddTastingViewController: UIImagePickerControllerDelegate, UINavigatio
             selectedImage = image
             imageView.image = image
         }
-    }
-}
-
-extension AddTastingViewController: CustomCameraViewControllerDelegate {
-    func customCameraViewController(_ controller: CustomCameraViewController, didCaptureImage image: UIImage) {
-        selectedImage = image
-        imageView.image = image
-        
-        // Save the image
-        if BourbonDatabase.shared.saveImage(image, filename: "tasting_\(UUID().uuidString).jpg") {
-            imageFilename = "tasting_\(UUID().uuidString).jpg"
-        }
-        
-        controller.dismiss(animated: true)
-    }
-    
-    func customCameraViewControllerDidCancel(_ controller: CustomCameraViewController) {
-        controller.dismiss(animated: true)
     }
 }
 

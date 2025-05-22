@@ -104,20 +104,23 @@ class AddBourbonViewController: UIViewController, CLLocationManagerDelegate, UIP
         buttonStackView.axis = .horizontal
         buttonStackView.spacing = 16
         buttonStackView.distribution = .fillEqually
+        buttonStackView.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(buttonStackView)
         
-        // Image Picker Button
+        // Choose Photo Button
+        imagePickerButton.setTitle("Choose Photo", for: .normal)
         imagePickerButton.setImage(UIImage(systemName: "photo"), for: .normal)
         imagePickerButton.tintColor = .systemBlue
         imagePickerButton.addTarget(self, action: #selector(selectImage), for: .touchUpInside)
         imagePickerButton.translatesAutoresizingMaskIntoConstraints = false
         buttonStackView.addArrangedSubview(imagePickerButton)
         
-        // Camera Button
+        // Take Photo Button
         cameraButton.setTitle("Take Photo", for: .normal)
         cameraButton.setImage(UIImage(systemName: "camera"), for: .normal)
         cameraButton.tintColor = .systemBlue
         cameraButton.addTarget(self, action: #selector(takePhoto), for: .touchUpInside)
+        cameraButton.translatesAutoresizingMaskIntoConstraints = false
         buttonStackView.addArrangedSubview(cameraButton)
         
         // Text Fields
@@ -299,7 +302,7 @@ class AddBourbonViewController: UIViewController, CLLocationManagerDelegate, UIP
             imageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             imageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             imageView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.8),
-            imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: 1.0),
+            imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor),
             
             // Button Stack View
             buttonStackView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 16),
@@ -450,108 +453,11 @@ class AddBourbonViewController: UIViewController, CLLocationManagerDelegate, UIP
     }
     
     @objc private func takePhoto() {
-        let cameraVC = CustomCameraViewController()
-        cameraVC.delegate = self
-        cameraVC.modalPresentationStyle = .fullScreen
-        present(cameraVC, animated: true)
-    }
-    
-    private func processImage(_ image: UIImage) -> UIImage {
-        // First fix the orientation
-        let fixedImage: UIImage
-        if image.imageOrientation != .up {
-            UIGraphicsBeginImageContextWithOptions(image.size, false, image.scale)
-            image.draw(in: CGRect(origin: .zero, size: image.size))
-            fixedImage = UIGraphicsGetImageFromCurrentImageContext() ?? image
-            UIGraphicsEndImageContext()
-        } else {
-            fixedImage = image
-        }
-        
-        // Calculate the target size while maintaining aspect ratio
-        let maxDimension: CGFloat = 2000
-        let aspectRatio = fixedImage.size.width / fixedImage.size.height
-        
-        var newSize: CGSize
-        if aspectRatio > 1 {
-            // Image is wider than tall
-            newSize = CGSize(width: maxDimension, height: maxDimension / aspectRatio)
-        } else {
-            // Image is taller than wide
-            newSize = CGSize(width: maxDimension * aspectRatio, height: maxDimension)
-        }
-        
-        // Create a new image context with the calculated size
-        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
-        fixedImage.draw(in: CGRect(origin: .zero, size: newSize))
-        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        return resizedImage ?? fixedImage
-    }
-    
-    private func saveImageToCustomAlbum(_ image: UIImage) {
-        // Request authorization
-        PHPhotoLibrary.requestAuthorization { [weak self] status in
-            guard status == .authorized else {
-                DispatchQueue.main.async {
-                    self?.showErrorAlert(message: "Please allow access to your photo library to save photos")
-                }
-                return
-            }
-            
-            // Create or get the custom album
-            let albumName = "My Bourbon Collection"
-            var albumAsset: PHAssetCollection?
-            
-            // Check if album exists
-            let fetchOptions = PHFetchOptions()
-            fetchOptions.predicate = NSPredicate(format: "title = %@", albumName)
-            let collections = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: fetchOptions)
-            
-            if let album = collections.firstObject {
-                albumAsset = album
-            } else {
-                // Create new album
-                PHPhotoLibrary.shared().performChanges({
-                    PHAssetCollectionChangeRequest.creationRequestForAssetCollection(withTitle: albumName)
-                }) { success, error in
-                    if success {
-                        let collections = PHAssetCollection.fetchAssetCollections(with: .album, subtype: .any, options: fetchOptions)
-                        albumAsset = collections.firstObject
-                    } else if let error = error {
-                        print("Error creating album: \(error.localizedDescription)")
-                    }
-                }
-            }
-            
-            // Save the image to the album
-            PHPhotoLibrary.shared().performChanges({
-                let createAssetRequest = PHAssetChangeRequest.creationRequestForAsset(from: image)
-                if let albumAsset = albumAsset,
-                   let albumChangeRequest = PHAssetCollectionChangeRequest(for: albumAsset) {
-                    albumChangeRequest.addAssets([createAssetRequest.placeholderForCreatedAsset!] as NSFastEnumeration)
-                }
-            }) { success, error in
-                DispatchQueue.main.async {
-                    if success {
-                        print("Successfully saved image to My Bourbon Collection album")
-                    } else if let error = error {
-                        print("Error saving image: \(error.localizedDescription)")
-                        self?.showErrorAlert(message: "Failed to save image to photo library")
-                    }
-                }
-            }
-        }
-    }
-
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        picker.dismiss(animated: true)
-        
-        if let image = info[.editedImage] as? UIImage ?? info[.originalImage] as? UIImage {
-            selectedImage = image
-            imageView.image = image
-        }
+        let picker = UIImagePickerController()
+        picker.sourceType = .camera
+        picker.delegate = self
+        picker.allowsEditing = true
+        present(picker, animated: true)
     }
     
     @objc func saveBourbon() {
@@ -900,37 +806,13 @@ extension AddBourbonViewController: UIImagePickerControllerDelegate, UINavigatio
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true)
     }
-}
-
-extension AddBourbonViewController: CustomCameraViewControllerDelegate {
-    func customCameraViewController(_ controller: CustomCameraViewController, didCaptureImage image: UIImage) {
-        controller.dismiss(animated: true) {
-            // Process the image to be properly sized
-            let processedImage = self.processImage(image)
-            self.selectedImage = processedImage
-            
-            // Update image view with animation
-            UIView.transition(with: self.imageView, duration: 0.3, options: .transitionCrossDissolve) {
-                self.imageView.image = processedImage
-            }
-            
-            // Save to photo library
-            UIImageWriteToSavedPhotosAlbum(processedImage, self, #selector(self.image(_:didFinishSavingWithError:contextInfo:)), nil)
-        }
-    }
     
-    func customCameraViewControllerDidCancel(_ controller: CustomCameraViewController) {
-        controller.dismiss(animated: true)
-    }
-    
-    @objc private func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
-        if let error = error {
-            print("Error saving image: \(error.localizedDescription)")
-            let alert = UIAlertController(title: "Error", message: "Failed to save image to photo library", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "OK", style: .default))
-            present(alert, animated: true)
-        } else {
-            print("Image saved successfully to photo library")
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: true)
+        
+        if let image = info[.editedImage] as? UIImage ?? info[.originalImage] as? UIImage {
+            selectedImage = image
+            imageView.image = image
         }
     }
 }

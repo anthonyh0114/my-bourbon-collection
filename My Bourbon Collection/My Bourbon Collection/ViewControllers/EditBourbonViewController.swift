@@ -11,6 +11,7 @@ protocol EditBourbonViewControllerDelegate: AnyObject {
 class EditBourbonViewController: AddBourbonViewController {
     weak var editDelegate: EditBourbonViewControllerDelegate?
     private let bourbon: Bourbon
+    private var editImageButton: UIButton?
     
     init(bourbon: Bourbon) {
         self.bourbon = bourbon
@@ -38,39 +39,46 @@ class EditBourbonViewController: AddBourbonViewController {
             fillLevelSlider.isHidden = true
             emptyLabel.isHidden = true
             fullLabel.isHidden = true
+            
+            // Adjust rating control position to be right after purchase date picker
+            ratingSegmentedControl.removeFromSuperview()
+            contentView.addSubview(ratingSegmentedControl)
+            
+            NSLayoutConstraint.activate([
+                ratingSegmentedControl.topAnchor.constraint(equalTo: purchaseDatePicker.bottomAnchor, constant: 16),
+                ratingSegmentedControl.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+                ratingSegmentedControl.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+                ratingSegmentedControl.heightAnchor.constraint(equalToConstant: 44)
+            ])
+            
+            // Adjust notes position to be right after rating control
+            notesTextView.removeFromSuperview()
+            contentView.addSubview(notesTextView)
+            
+            NSLayoutConstraint.activate([
+                notesTextView.topAnchor.constraint(equalTo: ratingSegmentedControl.bottomAnchor, constant: 16),
+                notesTextView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+                notesTextView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+                notesTextView.heightAnchor.constraint(equalToConstant: 100),
+                notesTextView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -20)
+            ])
         }
+        
+        // Ensure image view is properly configured
+        imageView.contentMode = .scaleAspectFit
+        imageView.backgroundColor = .systemGray6
+        imageView.layer.cornerRadius = 8
+        imageView.clipsToBounds = true
         
         populateFields()
         setupLocationServices()
-        setupEditButton()
-    }
-    
-    private func setupEditButton() {
-        // Create and configure the image picker button
-        let imagePickerButton = UIButton(type: .system)
-        imagePickerButton.setImage(UIImage(systemName: "photo"), for: .normal)
-        imagePickerButton.tintColor = .systemBlue
-        imagePickerButton.addTarget(self, action: #selector(selectImage), for: .touchUpInside)
-        imagePickerButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Add the button to the image view
-        imageView.addSubview(imagePickerButton)
-        
-        NSLayoutConstraint.activate([
-            imagePickerButton.trailingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: -8),
-            imagePickerButton.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -8),
-            imagePickerButton.widthAnchor.constraint(equalToConstant: 32),
-            imagePickerButton.heightAnchor.constraint(equalToConstant: 32)
-        ])
-        
-        // Store the button reference
-        self.imagePickerButton = imagePickerButton
     }
     
     private func populateFields() {
         // Load existing image if available
-        if let imageFilename = bourbon.imageFilename {
-            if let image = BourbonDatabase.shared.loadImage(filename: imageFilename) {
+        let imageFilename = bourbon.imageFilename
+        if !imageFilename.isEmpty {
+            if let image = ImageService.shared.loadImage(filename: imageFilename) {
                 selectedImage = image
                 imageView.image = image
             } else {
@@ -83,7 +91,7 @@ class EditBourbonViewController: AddBourbonViewController {
         // Populate other fields
         nameTextField.text = bourbon.name
         proofTextField.text = String(bourbon.proof)
-        ageTextField.text = bourbon.age > 0 ? String(bourbon.age) : ""
+        ageTextField.text = bourbon.age.isEmpty ? "" : bourbon.age
         purchaseLocationTextField.text = bourbon.purchaseLocation
         flavorProfileTextField.text = bourbon.flavorProfile
         notesTextView.text = bourbon.notes
@@ -201,23 +209,6 @@ class EditBourbonViewController: AddBourbonViewController {
         } else {
             navigationItem.rightBarButtonItem?.isEnabled = true
             showErrorAlert(message: "Failed to update bourbon. Please try again.")
-        }
-    }
-    
-    @objc private func selectImage() {
-        let picker = UIImagePickerController()
-        picker.sourceType = .photoLibrary
-        picker.delegate = self
-        picker.allowsEditing = true
-        present(picker, animated: true)
-    }
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        picker.dismiss(animated: true)
-        
-        if let image = info[.editedImage] as? UIImage ?? info[.originalImage] as? UIImage {
-            selectedImage = image
-            imageView.image = image
         }
     }
 } 
