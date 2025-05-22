@@ -42,58 +42,60 @@ class EditBourbonViewController: AddBourbonViewController {
         
         populateFields()
         setupLocationServices()
+        setupEditButton()
+    }
+    
+    private func setupEditButton() {
+        // Create and configure the image picker button
+        let imagePickerButton = UIButton(type: .system)
+        imagePickerButton.setImage(UIImage(systemName: "photo"), for: .normal)
+        imagePickerButton.tintColor = .systemBlue
+        imagePickerButton.addTarget(self, action: #selector(selectImage), for: .touchUpInside)
+        imagePickerButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Add the button to the image view
+        imageView.addSubview(imagePickerButton)
+        
+        NSLayoutConstraint.activate([
+            imagePickerButton.trailingAnchor.constraint(equalTo: imageView.trailingAnchor, constant: -8),
+            imagePickerButton.bottomAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -8),
+            imagePickerButton.widthAnchor.constraint(equalToConstant: 32),
+            imagePickerButton.heightAnchor.constraint(equalToConstant: 32)
+        ])
+        
+        // Store the button reference
+        self.imagePickerButton = imagePickerButton
     }
     
     private func populateFields() {
+        // Load existing image if available
+        if let imageFilename = bourbon.imageFilename {
+            if let image = BourbonDatabase.shared.loadImage(filename: imageFilename) {
+                selectedImage = image
+                imageView.image = image
+            } else {
+                imageView.image = UIImage(named: "placeholder")
+            }
+        } else {
+            imageView.image = UIImage(named: "placeholder")
+        }
+        
+        // Populate other fields
         nameTextField.text = bourbon.name
         proofTextField.text = String(bourbon.proof)
-        abvTextField.text = String(format: "%.1f%%", Double(bourbon.proof) / 2.0)
-        ageTextField.text = String(bourbon.age)
+        ageTextField.text = bourbon.age > 0 ? String(bourbon.age) : ""
         purchaseLocationTextField.text = bourbon.purchaseLocation
         flavorProfileTextField.text = bourbon.flavorProfile
         notesTextView.text = bourbon.notes
-        priceTextField.text = String(format: "%.2f", bourbon.price)
+        priceTextField.text = bourbon.price > 0 ? String(format: "%.2f", bourbon.price) : ""
         sizeTextField.text = bourbon.size
-        selectedRating = bourbon.rating
-        ratingSegmentedControl.selectedSegmentIndex = bourbon.rating - 1
-        
-        if let dateOpened = bourbon.dateOpened {
-            dateOpenedPicker.date = dateOpened
-            selectedDateOpened = dateOpened
-        }
-        
-        if let dateEmptied = bourbon.dateEmptied {
-            dateEmptiedPicker.date = dateEmptied
-            selectedDateEmptied = dateEmptied
-        }
-        
-        // Set up size picker
-        sizeTextField.inputView = sizePicker
-        sizePicker.delegate = self
-        sizePicker.dataSource = self
-        
-        // Add a toolbar with a "Done" button to dismiss the picker
-        let toolbar = UIToolbar()
-        toolbar.sizeToFit()
-        let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(doneButtonTapped))
-        let flexSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-        toolbar.items = [flexSpace, doneButton]
-        sizeTextField.inputAccessoryView = toolbar
-        
-        // Set the size text and selected size
-        sizeTextField.text = bourbon.size
-        selectedSize = bourbon.size
-        if let index = sizes.firstIndex(of: bourbon.size) {
-            sizePicker.selectRow(index, inComponent: 0, animated: false)
-        }
-        
         purchaseDatePicker.date = bourbon.purchaseDate
-        
-        // Load existing image
-        if let image = ImageService.shared.loadImage(filename: bourbon.imageFilename) {
-            selectedImage = image
-            imageView.image = image
-        }
+        dateOpenedPicker.date = bourbon.dateOpened ?? Date()
+        selectedDateOpened = bourbon.dateOpened
+        selectedRating = bourbon.rating
+        ratingSegmentedControl.selectedSegmentIndex = bourbon.rating
+        fillLevelSlider.value = Float(bourbon.fillLevel)
+        updateFillLevelLabel()
     }
     
     private func setupLocationServices() {
@@ -199,6 +201,23 @@ class EditBourbonViewController: AddBourbonViewController {
         } else {
             navigationItem.rightBarButtonItem?.isEnabled = true
             showErrorAlert(message: "Failed to update bourbon. Please try again.")
+        }
+    }
+    
+    @objc private func selectImage() {
+        let picker = UIImagePickerController()
+        picker.sourceType = .photoLibrary
+        picker.delegate = self
+        picker.allowsEditing = true
+        present(picker, animated: true)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: true)
+        
+        if let image = info[.editedImage] as? UIImage ?? info[.originalImage] as? UIImage {
+            selectedImage = image
+            imageView.image = image
         }
     }
 } 

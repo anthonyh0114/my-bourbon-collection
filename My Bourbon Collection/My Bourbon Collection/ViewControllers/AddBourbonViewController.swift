@@ -107,10 +107,10 @@ class AddBourbonViewController: UIViewController, CLLocationManagerDelegate, UIP
         contentView.addSubview(buttonStackView)
         
         // Image Picker Button
-        imagePickerButton.setTitle("Choose Photo", for: .normal)
         imagePickerButton.setImage(UIImage(systemName: "photo"), for: .normal)
         imagePickerButton.tintColor = .systemBlue
         imagePickerButton.addTarget(self, action: #selector(selectImage), for: .touchUpInside)
+        imagePickerButton.translatesAutoresizingMaskIntoConstraints = false
         buttonStackView.addArrangedSubview(imagePickerButton)
         
         // Camera Button
@@ -446,7 +446,6 @@ class AddBourbonViewController: UIViewController, CLLocationManagerDelegate, UIP
         picker.sourceType = .photoLibrary
         picker.delegate = self
         picker.allowsEditing = true
-        picker.modalPresentationStyle = .fullScreen
         present(picker, animated: true)
     }
     
@@ -550,19 +549,8 @@ class AddBourbonViewController: UIViewController, CLLocationManagerDelegate, UIP
         picker.dismiss(animated: true)
         
         if let image = info[.editedImage] as? UIImage ?? info[.originalImage] as? UIImage {
-            // Process the image to be properly sized
-            let processedImage = processImage(image)
-            selectedImage = processedImage
-            
-            // Update image view with animation
-            UIView.transition(with: imageView, duration: 0.3, options: .transitionCrossDissolve) {
-                self.imageView.image = processedImage
-            }
-            
-            // Only save to photo library if the image came from the camera
-            if picker.sourceType == .camera {
-                saveImageToCustomAlbum(processedImage)
-            }
+            selectedImage = image
+            imageView.image = image
         }
     }
     
