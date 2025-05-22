@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bourbon Collection - User Guide</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        h2 {
+            margin-top: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        code {
+            background-color: #f8f9fa;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+        }
+        .note {
+            background-color: #e7f5ff;
+            border-left: 4px solid #339af0;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .feature-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .feature-list li {
+            margin-bottom: 10px;
+            padding-left: 25px;
+            position: relative;
+        }
+        .feature-list li:before {
+            content: "•";
+            color: #339af0;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>My Bourbon Collection - User Guide</h1>
+    
+    <div class="note">
+        <strong>Note:</strong> This guide is for version 1.0 of My Bourbon Collection iOS app.
+    </div>
+
+    <h2>Table of Contents</h2>
+    <ul>
+        <li><a href="#introduction">Introduction</a></li>
+        <li><a href="#installation">Installation</a></li>
+        <li><a href="#features">Features</a></li>
+        <li><a href="#usage">Usage Guide</a></li>
+        <li><a href="#tips">Tips & Tricks</a></li>
+    </ul>
+
+    <h2 id="introduction">Introduction</h2>
+    <p>
+        My Bourbon Collection is an iOS application designed to help bourbon enthusiasts track and manage their collection. 
+        Whether you're a casual collector or a serious connoisseur, this app provides an easy way to catalog your bottles, 
+        record tasting notes, and keep track of your ratings.
+    </p>
+
+    <h2 id="installation">Installation</h2>
+    <p>
+        To install My Bourbon Collection:
+    </p>
+    <ol>
+        <li>Clone the repository from GitHub</li>
+        <li>Open the project in Xcode 15.0 or later</li>
+        <li>Build and run the project on your iOS device or simulator (iOS 17.0 or later required)</li>
+    </ol>
+
+    <h2 id="features">Features</h2>
+    <ul class="feature-list">
+        <li><strong>Collection Management</strong>
+            <ul>
+                <li>Add new bourbons to your collection</li>
+                <li>Edit existing entries</li>
+                <li>Delete bottles from your collection</li>
+                <li>View your collection in list or grid format</li>
+            </ul>
+        </li>
+        <li><strong>Bottle Information</strong>
+            <ul>
+                <li>Name and brand</li>
+                <li>Bottle size (50ml, 100ml, 375ml, 750ml, 1500ml, 1750ml)</li>
+                <li>Proof/ABV</li>
+                <li>Age statement</li>
+                <li>Price</li>
+                <li>Purchase date</li>
+                <li>Bottle photo</li>
+            </ul>
+        </li>
+        <li><strong>Tasting Notes</strong>
+            <ul>
+                <li>Record detailed tasting notes</li>
+                <li>Rate bourbons on a 5-star scale</li>
+                <li>Track your preferences over time</li>
+            </ul>
+        </li>
+        <li><strong>View Options</strong>
+            <ul>
+                <li>Switch between list and grid views</li>
+                <li>Sort by name, rating, or purchase date</li>
+                <li>Search your collection</li>
+            </ul>
+        </li>
+    </ul>
+
+    <h2 id="usage">Usage Guide</h2>
+
+    <h3>Adding a New Bourbon</h3>
+    <ol>
+        <li>Tap the "+" button in the top right corner</li>
+        <li>Fill in the required information:
+            <ul>
+                <li>Name (required)</li>
+                <li>Size (required)</li>
+                <li>Proof/ABV (required)</li>
+                <li>Age statement (optional)</li>
+                <li>Price (optional)</li>
+                <li>Purchase date (optional)</li>
+                <li>Photo (optional)</li>
+            </ul>
+        </li>
+        <li>Tap "Save" to add the bourbon to your collection</li>
+    </ol>
+
+    <h3>Editing a Bourbon</h3>
+    <ol>
+        <li>Select a bourbon from your collection</li>
+        <li>Tap the "Edit" button</li>
+        <li>Modify any information as needed</li>
+        <li>Tap "Save" to update the entry</li>
+    </ol>
+
+    <h3>Adding Tasting Notes</h3>
+    <ol>
+        <li>Select a bourbon from your collection</li>
+        <li>Tap "Add Tasting Notes"</li>
+        <li>Enter your notes in the text field</li>
+        <li>Rate the bourbon using the star rating system</li>
+        <li>Tap "Save" to record your notes</li>
+    </ol>
+
+    <h3>Viewing Your Collection</h3>
+    <ul>
+        <li>Use the segmented control to switch between list and grid views</li>
+        <li>Tap the sort button to change the sorting order</li>
+        <li>Use the search bar to find specific bourbons</li>
+        <li>Tap on any bourbon to view its details</li>
+    </ul>
+
+    <h2 id="tips">Tips & Tricks</h2>
+    <ul class="feature-list">
+        <li>Take clear, well-lit photos of your bottles for better visual organization</li>
+        <li>Use consistent naming conventions for easier searching</li>
+        <li>Regularly update your tasting notes to track how your preferences evolve</li>
+        <li>Use the search function to quickly find specific bottles in large collections</li>
+        <li>Take advantage of the grid view for a visual overview of your collection</li>
+    </ul>
+
+    <div class="note">
+        <strong>Support:</strong> If you encounter any issues or have suggestions for improvements, 
+        please open an issue on the GitHub repository.
+    </div>
+
+    <footer style="margin-top: 50px; padding-top: 20px; border-top: 1px solid #eee; text-align: center; color: #666;">
+        <p>My Bourbon Collection - Version 1.0</p>
+        <p>© 2024 All rights reserved</p>
+    </footer>
+</body>
+</html> 
