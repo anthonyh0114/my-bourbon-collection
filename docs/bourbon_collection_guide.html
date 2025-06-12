@@ -3,246 +3,268 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Bourbon Collection - User Guide</title>
+    <title>My Bourbon Collection - User's Guide</title>
     <style>
+        :root {
+            --brand-color: #8B4513;
+            --brand-text: #D2691E;
+            --background: #FFFFFF;
+            --text: #333333;
+            --secondary-text: #666666;
+            --border: #E0E0E0;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             line-height: 1.6;
+            color: var(--text);
             max-width: 800px;
             margin: 0 auto;
             padding: 20px;
-            color: #333;
+            background-color: var(--background);
         }
+
         h1, h2, h3 {
-            color: #2c3e50;
+            color: var(--brand-color);
+            margin-top: 2em;
         }
+
         h1 {
-            border-bottom: 2px solid #eee;
-            padding-bottom: 10px;
+            font-size: 2.5em;
+            text-align: center;
+            border-bottom: 2px solid var(--brand-color);
+            padding-bottom: 0.5em;
+            margin-bottom: 1em;
         }
+
         h2 {
-            margin-top: 30px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 5px;
+            font-size: 1.8em;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.3em;
         }
-        code {
-            background-color: #f8f9fa;
-            padding: 2px 4px;
-            border-radius: 4px;
-            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+
+        h3 {
+            font-size: 1.4em;
+            color: var(--brand-text);
         }
-        .note {
-            background-color: #e7f5ff;
-            border-left: 4px solid #339af0;
+
+        .section {
+            margin-bottom: 3em;
+            padding: 20px;
+            background: #FAFAFA;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .tip {
+            background-color: #FFF3E0;
+            border-left: 4px solid var(--brand-color);
             padding: 15px;
-            margin: 20px 0;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
         }
+
         .feature-list {
             list-style-type: none;
-            padding-left: 0;
+            padding: 0;
         }
+
         .feature-list li {
-            margin-bottom: 10px;
+            margin-bottom: 15px;
             padding-left: 25px;
             position: relative;
         }
+
         .feature-list li:before {
             content: "•";
-            color: #339af0;
+            color: var(--brand-color);
             font-weight: bold;
             position: absolute;
             left: 0;
         }
+
+        .note {
+            font-style: italic;
+            color: var(--secondary-text);
+            margin: 10px 0;
+        }
+
         img {
             max-width: 100%;
             height: auto;
             border-radius: 8px;
-            margin: 20px 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin: 10px 0;
         }
-        a {
-            color: #007AFF;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
+
+        .emoji {
+            font-size: 1.2em;
         }
     </style>
 </head>
 <body>
-    <h1>My Bourbon Collection - User Guide</h1>
-    
-    <div class="note">
-        <strong>Note:</strong> This guide is for version 1.0 of My Bourbon Collection iOS app.
+    <h1>My Bourbon Collection - User's Guide</h1>
+
+    <!-- Usage Guide Section -->
+    <div class="section">
+        <h2>Usage Guide</h2>
+        
+        <h3>Adding a New Bourbon</h3>
+        <ol>
+            <li>Tap the "+" button in the top right corner</li>
+            <li>Fill in the required fields (marked with *):
+                <ul>
+                    <li>Name</li>
+                    <li>Proof (must be between 80-160)</li>
+                    <li>Price</li>
+                    <li>Purchase Date</li>
+                </ul>
+            </li>
+            <li>Optional fields:
+                <ul>
+                    <li>Photo (take a new photo or choose from library)</li>
+                    <li>Purchase Location (search nearby businesses)</li>
+                    <li>Flavor Profile</li>
+                    <li>Size (select from predefined options)</li>
+                    <li>Rating (👎, 👌, or 👍)</li>
+                    <li>Fill Level (slide to indicate remaining amount)</li>
+                    <li>Notes</li>
+                </ul>
+            </li>
+            <li>Tap "Save" to add the bourbon to your collection</li>
+        </ol>
+
+        <h3>Managing Your Collection</h3>
+        <ul>
+            <li>View all bourbons in a scrollable list</li>
+            <li>Tap any bourbon to view its details</li>
+            <li>Swipe left on a bourbon to delete it</li>
+            <li>Use the search bar to find specific bourbons</li>
+        </ul>
+
+        <h3>Tracking Bourbon Lifecycle</h3>
+        <ul>
+            <li>Record when you open a bottle using the "Date Opened" field</li>
+            <li>Mark when you finish a bottle using the "Date Emptied" field</li>
+            <li>Use the Fill Level slider to track remaining amount</li>
+            <li><span class="note">Note: Date tracking is not available for small sizes (50ml, 100ml, Tasting)</span></li>
+        </ul>
     </div>
 
-    <h2>Table of Contents</h2>
-    <ul>
-        <li><a href="#usage">Usage Guide</a></li>
-        <li><a href="#tips">Tips & Tricks</a></li>
-        <li><a href="#introduction">Introduction</a></li>
-        <li><a href="#features">Features</a></li>
+    <!-- Tips & Tricks Section -->
+    <div class="section">
+        <h2>Tips & Tricks</h2>
 
-    </ul>
+        <div class="tip">
+            <strong>Quick Location Entry:</strong> After using a location 3 times, it appears in the saved locations list (📋 icon) for quick selection.
+        </div>
 
-    <h2 id="usage">Usage Guide</h2>
-
-    <h3>Adding a New Bourbon to Inventory</h3>
-    <ol>
-        <li>Tap the "+" floating action button in the bottom right corner</li>
-        <li>Select "Inventory" from the category options</li>
-        <li>Fill in the required information:
+        <div class="tip">
+            <strong>Photo Tips:</strong>
             <ul>
-                <li>Name (required)</li>
-                <li>Proof (required) - Enter the proof value; ABV will be automatically calculated</li>
-                <li>Purchase date (required)</li>
-                <li>Size (optional) - Choose from standard bottle sizes</li>
-                <li>Age statement (optional)</li>
-                <li>Price (optional)</li>
-                <li>Date opened (optional)</li>
-                <li>Date emptied (optional)</li>
-                <li>Photo (optional)</li>
+                <li>Take photos in good lighting for best results</li>
+                <li>Include the label clearly in the frame</li>
+                <li>Photos are automatically saved to a "My Bourbon Collection" album</li>
             </ul>
-        </li>
-        <li>Tap "Save" to add the bourbon to your inventory</li>
-    </ol>
+        </div>
 
-    <h3>Adding a Tasting Experience</h3>
-    <ol>
-        <li>Tap the "+" floating action button in the bottom right corner</li>
-        <li>Select "Tastings" from the category options</li>
-        <li>Fill in the required information:
+        <div class="tip">
+            <strong>Rating System:</strong>
             <ul>
-                <li>Name (required)</li>
-                <li>Proof (required) - Enter the proof value; ABV will be automatically calculated</li>
-                <li>Tasting date (required)</li>
-                <li>Size (optional) - Choose from standard bottle sizes</li>
-                <li>Age statement (optional)</li>
-                <li>Price (optional)</li>
-                <li>Photo (optional)</li>
+                <li>👎 = 1 star (Not recommended)</li>
+                <li>👌 = 3 stars (Good)</li>
+                <li>👍 = 5 stars (Excellent)</li>
             </ul>
-        </li>
-        <li>Tap "Save" to add the tasting to your collection</li>
-    </ol>
+        </div>
 
-    <h3>Editing a Bourbon or Tasting</h3>
-    <ol>
-        <li>Select a bourbon or tasting from your collection</li>
-        <li>Tap the pencil icon (✏️) in the top right corner</li>
-        <li>Modify any information as needed</li>
-        <li>Tap "Save" to update the entry</li>
-    </ol>
-
-    <h3>Rating a Bourbon</h3>
-    <ol>
-        <li>Select a bourbon from your collection</li>
-        <li>Choose your rating:
+        <div class="tip">
+            <strong>Fill Level Tracking:</strong>
             <ul>
-                <li>👎 - Not recommended</li>
-                <li>👌 - Good</li>
-                <li>👍 - Excellent</li>
+                <li>Use the slider to quickly update remaining amount</li>
+                <li>Red indicator appears when below 10%</li>
+                <li>Perfect for tracking shared bottles</li>
             </ul>
-        </li>
-        <li>The rating will be saved automatically</li>
-    </ol>
+        </div>
 
-    <h3>Viewing Your Collection</h3>
-    <ul>
-        <li>Use the grid/list toggle button to switch between views</li>
-        <li>In grid view, use pinch gestures to zoom in/out</li>
-        <li>Tap the sort button to change the sorting order</li>
-        <li>Use the search button to find specific bourbons</li>
-        <li>Tap on any bourbon to view its details</li>
-    </ul>
-
-    <h2 id="tips">Tips & Tricks</h2>
-    <ul class="feature-list">
-        <li>Take clear, well-lit photos of your bottles for better visual organization</li>
-        <li>Use consistent naming conventions for easier searching</li>
-        <li>Use the grid view for a visual overview of your collection</li>
-        <li>Take advantage of the pinch-to-zoom feature in grid view for better visibility</li>
-        <li>Use the sort function to organize your collection by different criteria</li>
-        <li>The help button (?) in the bottom left corner provides quick access to this guide</li>
-        <li>When entering proof, the ABV will be automatically calculated (Proof ÷ 2)</li>
-        <li>Don't forget to set the purchase date for inventory items - it's required and helps track your collection's history</li>
-        <li>Track your bottles' lifecycle by recording when you open and empty them</li>
-        <li>Use the Tastings category to keep a record of your bourbon sampling experiences</li>
-        <li>Stay tuned for the Infinity category, coming soon!</li>
-    </ul>
-
-    <h2 id="introduction">Introduction</h2>
-    <p>
-        My Bourbon Collection is an iOS application designed to help bourbon enthusiasts track and manage their collection. 
-        Whether you're a casual collector or a serious connoisseur, this app provides an easy way to catalog your bottles, 
-        record tasting notes, and keep track of your ratings. Created by Col Wood, a bourbon enthusiast and developer, 
-        this app combines professional software design with a passion for fine spirits.
-    </p>
-
-    <h2 id="features">Features</h2>
-    <ul class="feature-list">
-        <li><strong>Collection Categories</strong>
+        <div class="tip">
+            <strong>Location Search:</strong>
             <ul>
-                <li>Inventory - Track your current bottle collection</li>
-                <li>Tastings - Record your tasting experiences</li>
-                <li>Infinity - Coming soon! Track your infinity bottle collection</li>
+                <li>Type at least 3 characters to search nearby businesses</li>
+                <li>Results show approximate distance</li>
+                <li>Frequently used locations are saved for quick access</li>
             </ul>
-        </li>
-        <li><strong>Collection Management</strong>
-            <ul>
-                <li>Add new bourbons to your collection</li>
-                <li>Add tasting experiences</li>
-                <li>Edit existing entries</li>
-                <li>Delete bottles from your collection</li>
-                <li>View your collection in list or grid format</li>
-            </ul>
-        </li>
-        <li><strong>Bottle Information</strong>
-            <ul>
-                <li>Name and brand</li>
-                <li>Bottle size (Shooter - 50ml, 100ml, Tasting, 375ml, 750ml, 1500ml, 1750ml)</li>
-                <li>Proof (required) - ABV is automatically calculated as Proof ÷ 2</li>
-                <li>Age statement</li>
-                <li>Price</li>
-                <li>Purchase date (required)</li>
-                <li>Date opened (optional)</li>
-                <li>Date emptied (optional)</li>
-                <li>Bottle photo</li>
-            </ul>
-        </li>
-        <li><strong>Rating System</strong>
-            <ul>
-                <li>Simple 3-level rating system (👎, 👌, 👍)</li>
-                <li>Quick visual feedback on bottle quality</li>
-            </ul>
-        </li>
-        <li><strong>View Options</strong>
-            <ul>
-                <li>Toggle between list and grid views using the layout button</li>
-                <li>Sort by multiple criteria:
-                    <ul>
-                        <li>Name (A-Z or Z-A)</li>
-                        <li>Proof (Low to High or High to Low)</li>
-                        <li>Age (Youngest to Oldest or Oldest to Youngest)</li>
-                        <li>Purchase Date (Oldest to Newest or Newest to Oldest)</li>
-                        <li>Rating (Low to High or High to Low)</li>
-                    </ul>
-                </li>
-                <li>Search your collection</li>
-                <li>Pinch to zoom in grid view</li>
-            </ul>
-        </li>
-    </ul>
-
-    <div class="note">
-        <strong>Support:</strong> If you encounter any issues or have suggestions for improvements, 
-        please visit the <a href="https://apps.apple.com/us/app/my-bourbon-collection/id6745380859" target="_blank">App Store page</a> 
-        and tap "App Support" to contact the developer.
+        </div>
     </div>
 
-    <footer style="margin-top: 50px; padding-top: 20px; border-top: 1px solid #eee; text-align: center; color: #666;">
-        <p>My Bourbon Collection - Version 1.0</p>
-        <p>Created by Col Wood</p>
-        <p>© 2024 wood40202 LLC. All rights reserved.</p>
-    </footer>
+    <!-- Introduction Section -->
+    <div class="section">
+        <h2>Introduction</h2>
+        
+        <p>Welcome to My Bourbon Collection, your personal bourbon tracking companion! This app helps you:</p>
+        <ul>
+            <li>Build and maintain your bourbon collection</li>
+            <li>Track your tasting experiences</li>
+            <li>Remember where you found each bottle</li>
+            <li>Monitor your collection's lifecycle</li>
+        </ul>
+
+        <p>Whether you're a casual enthusiast or a serious collector, this app provides the tools you need to:</p>
+        <ul>
+            <li>Document your bourbon journey</li>
+            <li>Make informed purchasing decisions</li>
+            <li>Share your experiences with others</li>
+            <li>Build a comprehensive collection database</li>
+        </ul>
+    </div>
+
+    <!-- Features Section -->
+    <div class="section">
+        <h2>Features</h2>
+
+        <h3>Core Features</h3>
+        <ul class="feature-list">
+            <li><strong>Collection Management</strong>
+                <ul>
+                    <li>Add and track unlimited bourbons</li>
+                    <li>Organize by name, date, or rating</li>
+                    <li>Search functionality</li>
+                    <li>Quick delete with swipe gesture</li>
+                </ul>
+            </li>
+            <li><strong>Photo Management</strong>
+                <ul>
+                    <li>Take photos directly in app</li>
+                    <li>Import from photo library</li>
+                    <li>Automatic photo organization</li>
+                    <li>Custom album creation</li>
+                </ul>
+            </li>
+            <li><strong>Location Tracking</strong>
+                <ul>
+                    <li>Search nearby businesses</li>
+                    <li>Save frequent locations</li>
+                    <li>Distance calculation</li>
+                    <li>Business categorization</li>
+                </ul>
+            </li>
+            <li><strong>Lifecycle Management</strong>
+                <ul>
+                    <li>Purchase date tracking</li>
+                    <li>Opening date recording</li>
+                    <li>Empty date logging</li>
+                    <li>Fill level monitoring</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h3>Additional Features</h3>
+        <ul class="feature-list">
+            <li><strong>Rating System</strong> - Quick emoji-based rating (👎, 👌, 👍)</li>
+            <li><strong>Size Tracking</strong> - Predefined size options from 50ml to 1750ml</li>
+            <li><strong>Proof Calculator</strong> - Automatic ABV calculation</li>
+            <li><strong>Notes</strong> - Add detailed tasting notes and observations</li>
+            <li><strong>Flavor Profile</strong> - Document tasting characteristics</li>
+            <li><strong>Price Tracking</strong> - Record purchase prices</li>
+        </ul>
+    </div>
 </body>
-</html> 
+</html>
