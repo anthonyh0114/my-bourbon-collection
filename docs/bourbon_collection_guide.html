@@ -110,7 +110,7 @@
         
         <h3>Adding a New Bourbon</h3>
         <ol>
-            <li>Tap the "+" button in the bottom right corner</li>
+            <li>Tap the "+" button in the top right corner</li>
             <li>Fill in the required fields (marked with *):
                 <ul>
                     <li>Name</li>
@@ -135,9 +135,10 @@
 
         <h3>Managing Your Collection</h3>
         <ul>
-            <li>View all bourbons in a scrollable list</li>
+            <li>View all bourbons in a scrollable list or grid view (toggle with the view button)</li>
             <li>Tap any bourbon to view its details</li>
-            <li>Swipe left on a bourbon to delete it</li>
+            <li><strong>NEW:</strong> Swipe left or right in detail view to navigate between bourbons</li>
+            <li>Swipe left on a bourbon in the list to delete it</li>
             <li>Use the search bar to find specific bourbons</li>
         </ul>
 
@@ -148,6 +149,96 @@
             <li>Use the Fill Level slider to track remaining amount</li>
             <li><span class="note">Note: Date tracking is not available for small sizes (50ml, 100ml, Tasting)</span></li>
         </ul>
+
+        <h3>Enhanced Navigation <span class="emoji">🔄</span></h3>
+        <p>Navigate through your bourbon collection with intuitive swipe gestures:</p>
+        <ul>
+            <li><strong>Swipe Right:</strong> View the previous bourbon in your collection</li>
+            <li><strong>Swipe Left:</strong> View the next bourbon in your collection</li>
+            <li><strong>Page Indicators:</strong> Dots at the bottom show your current position and total count</li>
+            <li><strong>Smart Title:</strong> Displays current bourbon name and position (e.g., "Buffalo Trace (2 of 5)")</li>
+            <li><strong>Seamless Editing:</strong> Edit and delete functions work while swiping between bourbons</li>
+            <li><strong>Automatic Navigation:</strong> When deleting a bourbon, automatically shows the next available one</li>
+        </ul>
+        <div class="note">
+            <strong>Pro Tip:</strong> This feature works from both the main list view and search results, making it easy to browse through filtered collections.
+        </div>
+
+        <h3>Advanced Photo Editing <span class="emoji">📸</span></h3>
+        <p>Transform your bourbon photos with professional editing tools:</p>
+        <ul>
+            <li><strong>Easy Access:</strong> Tap any photo in edit screens to open the advanced editor</li>
+            <li><strong>Smart Cropping:</strong> 
+                <ul>
+                    <li>Free-form cropping with zoom and pan</li>
+                    <li>Aspect ratio presets (Square, 4:3, 16:9, Custom)</li>
+                    <li>Grid overlay for perfect alignment</li>
+                    <li>Real-time preview of changes</li>
+                </ul>
+            </li>
+            <li><strong>Rotation & Orientation:</strong>
+                <ul>
+                    <li>90-degree rotation in both directions</li>
+                    <li>Automatic orientation correction</li>
+                    <li>Flip horizontal and vertical</li>
+                </ul>
+            </li>
+            <li><strong>Image Enhancement:</strong>
+                <ul>
+                    <li>Brightness adjustment (-100 to +100)</li>
+                    <li>Contrast control for better definition</li>
+                    <li>Saturation adjustment for vibrant colors</li>
+                    <li>Real-time sliders with live preview</li>
+                </ul>
+            </li>
+            <li><strong>Zoom & Pan:</strong>
+                <ul>
+                    <li>Pinch to zoom for detailed editing</li>
+                    <li>Drag to pan around the image</li>
+                    <li>Double-tap to reset zoom level</li>
+                </ul>
+            </li>
+            <li><strong>User-Friendly Interface:</strong>
+                <ul>
+                    <li>Intuitive gesture controls</li>
+                    <li>Undo/Redo functionality</li>
+                    <li>Reset button to restore original</li>
+                    <li>Save button to apply changes</li>
+                </ul>
+            </li>
+        </ul>
+        <div class="note">
+            <strong>Pro Tip:</strong> Available in all edit screens - Add/Edit Bourbon, Add/Edit Tasting, and Infinity Bottle management. Perfect for enhancing label clarity and improving photo quality.
+        </div>
+
+        <h3>Enhanced Location Services <span class="emoji">📍</span></h3>
+        <p>Find the perfect bourbon retailers with our advanced location search:</p>
+        <ul>
+            <li><strong>Foursquare Integration:</strong> Powered by the world's leading venue database</li>
+            <li><strong>Smart Filtering:</strong> Automatically shows only bourbon-relevant businesses:
+                <ul>
+                    <li>Liquor stores and spirits shops</li>
+                    <li>Bars and pubs (including Irish pubs)</li>
+                    <li>Distilleries and tasting rooms</li>
+                    <li>Restaurants with alcohol service</li>
+                    <li>Grocery stores with alcohol sections</li>
+                </ul>
+            </li>
+            <li><strong>Rich Venue Data:</strong> Each result includes:
+                <ul>
+                    <li>Venue ratings and reviews</li>
+                    <li>User photos and tips</li>
+                    <li>Popularity indicators</li>
+                    <li>Business hours and contact info</li>
+                </ul>
+            </li>
+            <li><strong>Focused Search Range:</strong> 1.5km radius for relevant, nearby options</li>
+            <li><strong>User-Friendly Distances:</strong> Displayed in familiar US units</li>
+            <li><strong>Reliable Fallback:</strong> Local search when API is unavailable</li>
+        </ul>
+        <div class="note">
+            <strong>Pro Tip:</strong> The app intelligently excludes non-alcohol businesses like furniture stores, clothing shops, and other retail stores to ensure you only see relevant results.
+        </div>
     </div>
 
     <!-- Tips & Tricks Section -->
@@ -164,6 +255,7 @@
                 <li>Take photos in good lighting for best results</li>
                 <li>Include the label clearly in the frame</li>
                 <li>Photos are automatically saved to a "My Bourbon Collection" album</li>
+                <li><strong>NEW:</strong> Tap any photo to edit it with advanced tools</li>
             </ul>
         </div>
 
@@ -186,11 +278,25 @@
         </div>
 
         <div class="tip">
-            <strong>Location Search:</strong>
+            <strong>Enhanced Location Search:</strong>
             <ul>
                 <li>Type at least 3 characters to search nearby businesses</li>
-                <li>Results show approximate distance</li>
+                <li>Powered by Foursquare Places API for accurate venue data</li>
+                <li>Smart filtering shows only alcohol-related businesses (liquor stores, bars, distilleries, restaurants with alcohol)</li>
+                <li>Results include ratings, photos, tips, and popularity information</li>
+                <li>Distance shown in user-friendly US units (feet, yards, miles)</li>
+                <li>1.5km search radius for focused, relevant results</li>
                 <li>Frequently used locations are saved for quick access</li>
+            </ul>
+        </div>
+
+        <div class="tip">
+            <strong>Enhanced Navigation:</strong>
+            <ul>
+                <li>Swipe left/right in any bourbon detail view to browse your entire collection</li>
+                <li>Page indicators at the bottom show your current position</li>
+                <li>Title displays current bourbon and position (e.g., "Buffalo Trace (2 of 5)")</li>
+                <li>Edit and delete functions work seamlessly while swiping</li>
             </ul>
         </div>
     </div>
@@ -228,6 +334,7 @@
                     <li>Organize by name, date, or rating</li>
                     <li>Search functionality</li>
                     <li>Quick delete with swipe gesture</li>
+                    <li><strong>NEW:</strong> Swipe navigation between bourbon details</li>
                 </ul>
             </li>
             <li><strong>Photo Management</strong>
@@ -236,14 +343,18 @@
                     <li>Import from photo library</li>
                     <li>Automatic photo organization</li>
                     <li>Custom album creation</li>
+                    <li><strong>NEW:</strong> Advanced photo editing with cropping, rotation, and enhancement tools</li>
                 </ul>
             </li>
-            <li><strong>Location Tracking</strong>
+            <li><strong>Enhanced Location Services</strong>
                 <ul>
-                    <li>Search nearby businesses</li>
-                    <li>Save frequent locations</li>
-                    <li>Distance calculation</li>
-                    <li>Business categorization</li>
+                    <li>Foursquare Places API integration for accurate venue data</li>
+                    <li>Smart filtering for alcohol-related businesses only</li>
+                    <li>Comprehensive venue information (ratings, photos, tips, popularity)</li>
+                    <li>1.5km search radius for focused coverage</li>
+                    <li>User-friendly distance display (feet, yards, miles)</li>
+                    <li>Save frequent locations for quick access</li>
+                    <li>Fallback to local search when API unavailable</li>
                 </ul>
             </li>
             <li><strong>Lifecycle Management</strong>
@@ -264,7 +375,10 @@
             <li><strong>Notes</strong> - Add detailed tasting notes and observations</li>
             <li><strong>Flavor Profile</strong> - Document tasting characteristics</li>
             <li><strong>Price Tracking</strong> - Record purchase prices</li>
+            <li><strong>Enhanced Navigation</strong> - Swipe between bourbon details with page indicators</li>
+            <li><strong>Advanced Photo Editing</strong> - Professional editing tools for perfect bourbon photos</li>
+            <li><strong>Portrait Mode Lock</strong> - Optimized display in portrait orientation</li>
         </ul>
     </div>
 </body>
-</html>
+</html> 
