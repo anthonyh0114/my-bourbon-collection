@@ -98,114 +98,79 @@
             border-radius: 10px;
             padding: 20px;
             margin: 20px 0;
-            box-shadow: 0 4px 15px rgba(210, 105, 30, 0.1);
         }
 
-        .feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            margin: 20px 0;
-        }
-
-        .feature-card {
-            background: white;
-            border: 2px solid #D2691E;
+        .feature-list {
+            background: linear-gradient(135deg, #F0F8FF 0%, #E6F3FF 100%);
+            border: 2px solid #4682B4;
             border-radius: 10px;
             padding: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
-        }
-
-        .feature-card h4 {
-            color: #8B4513;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        .step-list {
-            counter-reset: step-counter;
-            list-style: none;
             margin: 20px 0;
         }
 
-        .step-list li {
-            counter-increment: step-counter;
-            margin-bottom: 15px;
-            padding: 15px;
-            background: #F8F8FF;
-            border-radius: 8px;
-            border-left: 4px solid #D2691E;
-            position: relative;
+        .warning-box {
+            background: linear-gradient(135deg, #FFF5EE 0%, #FFE4E1 100%);
+            border: 2px solid #FF6347;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
         }
 
-        .step-list li::before {
-            content: counter(step-counter);
-            background: #8B4513;
-            color: white;
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            margin-right: 15px;
-            font-size: 0.9rem;
+        .success-box {
+            background: linear-gradient(135deg, #F0FFF0 0%, #E6FFE6 100%);
+            border: 2px solid #32CD32;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
         }
 
         .faq-item {
-            background: #FAFAFA;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
             border-radius: 8px;
             padding: 20px;
             margin: 15px 0;
-            border-left: 4px solid #D2691E;
         }
 
-        .faq-item strong {
+        .faq-question {
+            font-weight: bold;
             color: #8B4513;
+            margin-bottom: 10px;
         }
 
-        .tips-section {
-            background: linear-gradient(135deg, #E6F3FF 0%, #F0F8FF 100%);
-            border: 2px solid #4682B4;
-            border-radius: 10px;
-            padding: 25px;
-            margin: 25px 0;
-        }
-
-        .tips-section h3 {
-            color: #4682B4;
-            border-bottom-color: #4682B4;
+        .faq-answer {
+            color: #555;
         }
 
         .version-info {
-            background: #F0F0F0;
-            border-radius: 8px;
-            padding: 15px;
+            background: linear-gradient(135deg, #E6E6FA 0%, #F0F8FF 100%);
+            border: 2px solid #9370DB;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
             text-align: center;
-            margin-top: 30px;
-            font-size: 0.9rem;
-            color: #666;
         }
 
         .emoji {
             font-size: 1.2em;
         }
 
-        .code-block {
-            background: #2D3748;
-            color: #E2E8F0;
+        .back-to-top {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #8B4513;
+            color: white;
             padding: 15px;
-            border-radius: 8px;
-            font-family: 'Courier New', monospace;
-            margin: 15px 0;
-            overflow-x: auto;
+            border-radius: 50%;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .back-to-top:hover {
+            background: #A0522D;
+            transform: translateY(-2px);
         }
 
         @media (max-width: 768px) {
@@ -220,10 +185,6 @@
             .header h1 {
                 font-size: 2rem;
             }
-            
-            .feature-grid {
-                grid-template-columns: 1fr;
-            }
         }
     </style>
 </head>
@@ -231,19 +192,20 @@
     <div class="container">
         <div class="header">
             <h1>🥃 My Bourbon Collection - User's Guide</h1>
-            <p>Your personal digital companion for managing and tracking your bourbon collection</p>
-            <p><strong>Version 2.0.5</strong> - Streamlined UI & Enhanced Features</p>
+            <p>Your personal digital companion for managing and tracking your bourbon collection, tastings, and discovering new releases</p>
         </div>
 
         <div class="content">
             <h2>📱 Welcome to Your Bourbon Collection</h2>
             <p><strong>My Bourbon Collection</strong> is your personal digital companion for managing and tracking your bourbon collection, tastings, and discovering new releases. This guide will walk you through all the features and help you get the most out of your bourbon journey.</p>
 
+            <hr style="margin: 30px 0; border: none; border-top: 2px solid #D2691E;">
+
             <h2>🚀 Getting Started</h2>
             
             <h3>First Launch Experience</h3>
             <p>When you first open the app, you'll experience a smooth onboarding flow:</p>
-            <ol class="step-list">
+            <ol>
                 <li><strong>Launch Screen</strong> - Beautiful bourbon-themed welcome</li>
                 <li><strong>Permissions Screen</strong> - Request access to camera, location, photo library, and push notifications</li>
                 <li><strong>Email Registration</strong> - Stay in the loop with bourbon news and events</li>
@@ -259,9 +221,20 @@
                 <li>Monthly reminders and exclusive content</li>
             </ul>
 
+            <div class="feature-list">
+                <h4>Enhanced Registration Process:</h4>
+                <ul>
+                    <li><strong>Double Email Entry</strong> - Enter your email twice to prevent typos</li>
+                    <li><strong>Real-time Validation</strong> - Visual feedback shows when emails match</li>
+                    <li><strong>Email Confirmation</strong> - Both fields must match before proceeding</li>
+                    <li><strong>Change Email Option</strong> - Edit your email address if needed</li>
+                    <li><strong>Start Over Button</strong> - Clear both fields for fresh input</li>
+                </ul>
+            </div>
+
             <h4>Registration Options:</h4>
             <ul>
-                <li><strong>Enter Email</strong> - Full access to all notifications</li>
+                <li><strong>Enter Email + Confirm</strong> - Full access to all notifications</li>
                 <li><strong>Skip for Now</strong> - You can always register later</li>
                 <li><strong>Manage Preferences</strong> - Control what you receive</li>
             </ul>
@@ -272,14 +245,14 @@
                 <li>You can register anytime from the main app</li>
             </ul>
 
-            <div class="highlight-box">
-                <h4>🔔 Push Notifications</h4>
-                <ul>
-                    <li>The app will request permission to send you push notifications</li>
-                    <li>This allows you to receive timely alerts even when the app is closed</li>
-                    <li>You can change this permission anytime in iOS Settings</li>
-                </ul>
-            </div>
+            <h4>Push Notifications:</h4>
+            <ul>
+                <li>The app will request permission to send you push notifications</li>
+                <li>This allows you to receive timely alerts even when the app is closed</li>
+                <li>You can change this permission anytime in iOS Settings</li>
+            </ul>
+
+            <hr style="margin: 30px 0; border: none; border-top: 2px solid #D2691E;">
 
             <h2>🏠 Main App Interface</h2>
             
@@ -289,6 +262,7 @@
                 <li><strong>Sort Button</strong> (↕️) - Organize your collection by name, proof, date, age, or rating</li>
                 <li><strong>View Toggle</strong> (⊞) - Switch between list and grid view</li>
                 <li><strong>Search</strong> (🔍) - Find specific bourbons quickly</li>
+                <li><strong>Preferences</strong> (🔔) - Manage notification settings</li>
             </ul>
 
             <h3>Bottom Navigation Bar</h3>
@@ -300,22 +274,18 @@
                 <li><strong>Add</strong> (+) - Add new bourbons to your collection</li>
             </ul>
 
-            <h3>Quick Access Features</h3>
+            <h3>Settings Access</h3>
             <ul>
-                <li><strong>Bell Icon</strong> (🔔) - Manage notification preferences and account settings</li>
-                <li><strong>Help Button</strong> (❓) - Access this user guide anytime</li>
-                <li><strong>Backup Button</strong> (🔄) - Manage your data backups</li>
+                <li><strong>Gear Icon</strong> (⚙️) - Full app settings and preferences</li>
+                <li><strong>Long Press</strong> - Quick access menu for settings and preferences</li>
             </ul>
-            
-            <div class="highlight-box">
-                <h4>📱 Settings Access - Coming Soon!</h4>
-                <p><strong>Note:</strong> Advanced settings and data export features are currently being prepared for future releases. The bell icon (🔔) provides access to essential notification and account preferences.</p>
-            </div>
+
+            <hr style="margin: 30px 0; border: none; border-top: 2px solid #D2691E;">
 
             <h2>📚 Managing Your Collection</h2>
             
             <h3>Adding Bourbons</h3>
-            <ol class="step-list">
+            <ol>
                 <li>Tap the <strong>+</strong> button</li>
                 <li>Fill in bourbon details:
                     <ul>
@@ -331,25 +301,20 @@
             </ol>
 
             <h3>Organizing Your Collection</h3>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h4>Sort Options</h4>
-                    <ul>
-                        <li>Name (A-Z or Z-A)</li>
-                        <li>Proof (Low to High or High to Low)</li>
-                        <li>Date (Oldest to Newest or Newest to Oldest)</li>
-                        <li>Age (Youngest to Oldest or Oldest to Youngest)</li>
-                        <li>Rating (Low to High or High to High)</li>
-                    </ul>
-                </div>
-                <div class="feature-card">
-                    <h4>View Options</h4>
-                    <ul>
-                        <li><strong>List View</strong> - Compact, detailed information</li>
-                        <li><strong>Grid View</strong> - Visual, photo-focused layout</li>
-                    </ul>
-                </div>
-            </div>
+            <h4>Sort Options:</h4>
+            <ul>
+                <li>Name (A-Z or Z-A)</li>
+                <li>Proof (Low to High or High to Low)</li>
+                <li>Date (Oldest to Newest or Newest to Oldest)</li>
+                <li>Age (Youngest to Oldest or Oldest to Youngest)</li>
+                <li>Rating (Low to High or High to High)</li>
+            </ul>
+
+            <h4>View Options:</h4>
+            <ul>
+                <li><strong>List View</strong> - Compact, detailed information</li>
+                <li><strong>Grid View</strong> - Visual, photo-focused layout</li>
+            </ul>
 
             <h3>Editing and Updating</h3>
             <ul>
@@ -358,10 +323,12 @@
                 <li><strong>Delete option</strong> for removing from collection</li>
             </ul>
 
+            <hr style="margin: 30px 0; border: none; border-top: 2px solid #D2691E;">
+
             <h2>🍷 Tasting Notes & Reviews</h2>
             
             <h3>Recording Tastings</h3>
-            <ol class="step-list">
+            <ol>
                 <li><strong>Add Tasting</strong> from bourbon detail view</li>
                 <li><strong>Rate</strong> your experience (1-5 stars)</li>
                 <li><strong>Add Notes:</strong>
@@ -374,98 +341,146 @@
                 </li>
             </ol>
 
+            <h3>Tasting History</h3>
+            <ul>
+                <li>Track how your palate evolves</li>
+                <li>Compare different expressions</li>
+                <li>Remember your favorites</li>
+            </ul>
+
+            <hr style="margin: 30px 0; border: none; border-top: 2px solid #D2691E;">
+
             <h2>📍 Location Features</h2>
             
-            <h3>Local Bourbon Discovery</h3>
+            <h3>Location Services</h3>
             <ul>
-                <li><strong>Find Events</strong> - Discover tastings and releases near you</li>
+                <li><strong>Automatic Detection</strong> - App detects your city/state</li>
+                <li><strong>Privacy-Focused</strong> - Only general location (no exact coordinates)</li>
+                <li><strong>Local Events</strong> - Find bourbon tastings near you</li>
                 <li><strong>Radius Settings</strong> - Adjust search area (default: 50 miles)</li>
-                <li><strong>Privacy Focused</strong> - Only city/state, no exact coordinates</li>
             </ul>
+
+            <h3>Location Permissions</h3>
+            <ul>
+                <li><strong>First Launch</strong> - Courtesy request for location access</li>
+                <li><strong>Optional</strong> - You can decline and still use the app</li>
+                <li><strong>Privacy First</strong> - Your exact location is never stored</li>
+            </ul>
+
+            <hr style="margin: 30px 0; border: none; border-top: 2px solid #D2691E;">
 
             <h2>🔔 Notification Preferences</h2>
             
-            <h3>What You Can Control</h3>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h4>Notification Types</h4>
-                    <ul>
-                        <li>✅ App Updates</li>
-                        <li>✅ Bourbon Tastings</li>
-                        <li>✅ Bourbon Releases</li>
-                        <li>✅ Monthly Reminders</li>
-                        <li>✅ Push Notifications</li>
-                        <li>✅ Email Notifications</li>
-                    </ul>
-                </div>
-                <div class="feature-card">
-                    <h4>Permission Status</h4>
-                    <ul>
-                        <li><strong>Green Checkmark</strong> ✅ - Permission granted</li>
-                        <li><strong>Red X</strong> ❌ - Permission denied</li>
-                        <li><strong>Allow Button</strong> - Permission not yet determined</li>
-                    </ul>
-                </div>
-            </div>
+            <h3>Managing Your Preferences</h3>
+            <p>Access from <strong>anywhere</strong> in the app:</p>
+            <ol>
+                <li><strong>Bell Icon</strong> (🔔) in top tools bar</li>
+                <li><strong>Bell Icon</strong> (🔔) in bottom navigation</li>
+                <li><strong>Settings</strong> → Notifications → "Manage All Preferences"</li>
+                <li><strong>Long Press</strong> gear icon → "Manage Preferences"</li>
+            </ol>
 
-            <h3>Quick Access Points</h3>
+            <h3>Preference Options</h3>
             <ul>
-                <li><strong>Bell Icon</strong> (🔔) - Available throughout the app</li>
-                <li><strong>Help Button</strong> (❓) - Access this user guide anytime</li>
-                <li><strong>Backup Button</strong> (🔄) - Manage your data backups</li>
+                <li><strong>App Updates</strong> - New features and improvements</li>
+                <li><strong>Bourbon Tastings</strong> - Events in your area</li>
+                <li><strong>Bourbon Releases</strong> - New products from distilleries</li>
+                <li><strong>Monthly Reminders</strong> - Periodic updates and tips</li>
+                <li><strong>Push Notifications</strong> - In-app alerts</li>
+                <li><strong>Email Notifications</strong> - Email updates</li>
             </ul>
+
+            <h3>Unsubscribe Options</h3>
+            <ul>
+                <li><strong>Individual Toggles</strong> - Turn specific notifications on/off</li>
+                <li><strong>Unsubscribe All</strong> - Disable all notifications at once</li>
+                <li><strong>Resubscribe</strong> - Re-enable notifications anytime</li>
+                <li><strong>Account Deletion</strong> - Remove all data permanently</li>
+            </ul>
+
+            <hr style="margin: 30px 0; border: none; border-top: 2px solid #D2691E;">
 
             <h2>⚙️ App Settings</h2>
             
-            <h3>Current Access</h3>
+            <h3>Account Management</h3>
             <ul>
-                <li><strong>Bell Icon</strong> (🔔) - Manage notification preferences and account settings</li>
-                <li><strong>Account Management</strong> - Update email, manage preferences, delete account</li>
-                <li><strong>Notification Controls</strong> - Customize what notifications you receive</li>
-                <li><strong>Photos</strong> - Save your bourbon images</li>
+                <li><strong>Email</strong> - Your registered email address</li>
+                <li><strong>Registration Date</strong> - When you joined</li>
+                <li><strong>Last Login</strong> - Recent activity</li>
             </ul>
 
-            <h3>Coming Soon - Enhanced Features</h3>
+            <h3>Data & Privacy</h3>
             <ul>
-                <li><strong>Data Export</strong> - Download your collection in various formats</li>
-                <li><strong>Advanced Settings</strong> - Comprehensive app configuration</li>
-                <li><strong>Premium Features</strong> - Enhanced data management capabilities</li>
+                <li><strong>Export My Data</strong> - Download your collection data</li>
+                <li><strong>Delete Account</strong> - Permanent removal (cannot be undone)</li>
+                <li><strong>Privacy Controls</strong> - Manage what data is collected</li>
             </ul>
-            
-            <div class="highlight-box">
-                <h4>🔔 Current Settings Access</h4>
-                <p>Use the <strong>bell icon (🔔)</strong> anywhere in the app to access your current notification preferences and account management options. Advanced settings will be available in future releases.</p>
-            </div>
+
+            <h3>Location Preferences</h3>
+            <ul>
+                <li><strong>Update Location</strong> - Refresh your current location</li>
+                <li><strong>Location Radius</strong> - Adjust search area for events</li>
+            </ul>
+
+            <hr style="margin: 30px 0; border: none; border-top: 2px solid #D2691E;">
 
             <h2>🔒 Privacy & Security</h2>
             
-            <h3>Your Data, Your Control</h3>
+            <h3>Data Collection</h3>
+            <p>We collect only what's necessary to provide you with the best experience:</p>
             <ul>
-                <li><strong>User Choice</strong> - Control what's collected</li>
-                <li><strong>No Tracking</strong> - We don't track across apps</li>
-                <li><strong>Account Deletion</strong> - Remove everything permanently</li>
-                <li><strong>Apple Compliant</strong> - Privacy manifest included</li>
+                <li><strong>Email Address</strong> - For notifications and account management</li>
+                <li><strong>General Location</strong> - City/state for local events (no exact coordinates)</li>
+                <li><strong>App Usage</strong> - To improve features and fix issues</li>
+                <li><strong>Collection Data</strong> - Your bourbons and tasting notes</li>
             </ul>
 
-            <h2>📊 Data Management</h2>
+            <h3>Privacy Controls</h3>
+            <ul>
+                <li><strong>User Choice</strong> - You control what data is collected</li>
+                <li><strong>No Tracking</strong> - We don't track you across other apps</li>
+                <li><strong>Data Export</strong> - Download your data anytime</li>
+                <li><strong>Account Deletion</strong> - Remove all data permanently</li>
+            </ul>
+
+            <div class="success-box">
+                <h3>Enhanced Privacy Compliance</h3>
+                <ul>
+                    <li><strong>Apple Privacy Manifest</strong> - Fully compliant with App Store requirements</li>
+                    <li><strong>Firebase 12.x Integration</strong> - Latest version with built-in privacy manifests</li>
+                    <li><strong>No Third-Party Tracking</strong> - Clean, privacy-first architecture</li>
+                    <li><strong>Secure Data Handling</strong> - Industry-standard security practices</li>
+                </ul>
+            </div>
+
+            <hr style="margin: 30px 0; border: none; border-top: 2px solid #D2691E;">
+
+            <h2>💾 Data Management</h2>
             
             <h3>Backup & Restore</h3>
             <ul>
                 <li><strong>Create Backup</strong> - Save your collection locally</li>
-                <li><strong>Restore from Backup</strong> - Recover lost data</li>
+                <li><strong>Restore from Backup</strong> - Recover data if needed</li>
                 <li><strong>View Backups</strong> - See available backup files</li>
             </ul>
 
-            <h3>Data Export - Coming Soon</h3>
-            <ul>
-                <li><strong>Download Collection</strong> - Get your data in various formats (JSON, CSV)</li>
-                <li><strong>Tasting Notes</strong> - Export your reviews and ratings</li>
-            </ul>
-            
-            <div class="highlight-box">
-                <h4>📊 Data Export Status</h4>
-                <p><strong>Note:</strong> Data export functionality is currently being prepared for future releases. This will allow you to download your complete collection data in various formats for backup and analysis purposes.</p>
+            <div class="warning-box">
+                <h4>Important for TestFlight Users:</h4>
+                <ul>
+                    <li><strong>Data persists</strong> between app updates in production</li>
+                    <li><strong>TestFlight builds</strong> may reset local data (this is normal)</li>
+                    <li><strong>Use backup/restore</strong> to preserve collections between TestFlight updates</li>
+                </ul>
             </div>
+
+            <h3>Data Export</h3>
+            <ul>
+                <li><strong>Download Collection</strong> - Get your data in a readable format</li>
+                <li><strong>Tasting Notes</strong> - Export your reviews and ratings</li>
+                <li><strong>Photos</strong> - Save your bourbon images</li>
+            </ul>
+
+            <hr style="margin: 30px 0; border: none; border-top: 2px solid #D2691E;">
 
             <h2>🆘 Help & Support</h2>
             
@@ -473,80 +488,67 @@
             <ul>
                 <li><strong>Help Button</strong> (❓) - Access assistance anytime</li>
                 <li><strong>In-App Tips</strong> - Contextual help throughout the app</li>
-                <li><strong>Bell Icon</strong> (🔔) - Manage preferences and account settings</li>
+                <li><strong>Settings</strong> - Comprehensive app configuration</li>
             </ul>
 
             <h3>Common Questions</h3>
             
             <div class="faq-item">
-                <strong>Q: How do I change my notification preferences?</strong><br>
-                A: Tap the bell icon (🔔) anywhere in the app to access "Manage All Preferences"
+                <div class="faq-question">Q: How do I change my notification preferences?</div>
+                <div class="faq-answer">A: Tap the bell icon (🔔) anywhere in the app, or go to Settings → Notifications → "Manage All Preferences"</div>
             </div>
 
             <div class="faq-item">
-                <strong>Q: Can I use the app without sharing my location?</strong><br>
-                A: Yes! Location is optional. You can decline and still enjoy all other features.
+                <div class="faq-question">Q: Can I use the app without sharing my location?</div>
+                <div class="faq-answer">A: Yes! Location is optional. You can decline and still enjoy all other features.</div>
             </div>
 
             <div class="faq-item">
-                <strong>Q: How do I backup my collection?</strong><br>
-                A: Tap the backup button (🔄) in the bottom navigation, then "Create Backup"
+                <div class="faq-question">Q: How do I backup my collection?</div>
+                <div class="faq-answer">A: Tap the backup button (🔄) in the bottom navigation, then "Create Backup"</div>
             </div>
 
             <div class="faq-item">
-                <strong>Q: What if I want to stop receiving notifications?</strong><br>
-                A: Go to any bell icon (🔔) and select "Unsubscribe from All" or adjust individual preferences.
+                <div class="faq-question">Q: What if I want to stop receiving notifications?</div>
+                <div class="faq-answer">A: Go to any bell icon (🔔) and select "Unsubscribe from All" or adjust individual preferences.</div>
             </div>
 
             <div class="faq-item">
-                <strong>Q: How do I delete my account?</strong><br>
-                A: Go to any bell icon (🔔) and select "Delete My Account" (⚠️ This action cannot be undone)
+                <div class="faq-question">Q: How do I delete my account?</div>
+                <div class="faq-answer">A: Go to any bell icon (🔔) and select "Delete My Account" (⚠️ This action cannot be undone)</div>
             </div>
 
             <div class="faq-item">
-                <strong>Q: What happens after I delete my account?</strong><br>
-                A: Your account data is completely removed, and you'll see a "Register New Account" option to start fresh
+                <div class="faq-question">Q: What happens after I delete my account?</div>
+                <div class="faq-answer">A: Your account data is completely removed, and you'll see a "Register New Account" option to start fresh</div>
             </div>
 
             <div class="faq-item">
-                <strong>Q: Can I re-register after unsubscribing?</strong><br>
-                A: Yes! Use the "Re-enter Email" button to resubscribe immediately, or wait for the monthly reminder
+                <div class="faq-question">Q: Can I re-register after unsubscribing?</div>
+                <div class="faq-answer">A: Yes! Use the "Change Email" button to edit your email, or "Start Over" to clear fields and re-enter</div>
             </div>
 
-            <h2>🚀 Current App State & Future Plans</h2>
-            
-            <div class="highlight-box">
-                <h4>📱 What's Available Now</h4>
-                <ul>
-                    <li><strong>Core Collection Management</strong> - Add, edit, and organize your bourbons</li>
-                    <li><strong>Notification System</strong> - Manage preferences through the bell icon (🔔)</li>
-                    <li><strong>Account Management</strong> - Register, manage preferences, delete account</li>
-                    <li><strong>Location Services</strong> - Find bourbon events near you</li>
-                    <li><strong>Data Backup</strong> - Local backup and restore functionality</li>
-                </ul>
+            <div class="faq-item">
+                <div class="faq-question">Q: Why do I need to enter my email twice during registration?</div>
+                <div class="faq-answer">A: This prevents typos and ensures you receive important notifications. Both fields must match exactly.</div>
             </div>
-            
-            <div class="highlight-box">
-                <h4>🔮 What's Coming Soon</h4>
-                <ul>
-                    <li><strong>Data Export</strong> - Download your collection in various formats</li>
-                    <li><strong>Advanced Settings</strong> - Comprehensive app configuration</li>
-                    <li><strong>Premium Features</strong> - Enhanced data management capabilities</li>
-                    <li><strong>Enhanced Access</strong> - Access to advanced features</li>
-                </ul>
+
+            <div class="faq-item">
+                <div class="faq-question">Q: What if my data disappears after a TestFlight update?</div>
+                <div class="faq-answer">A: Use the backup/restore feature to preserve your collection between TestFlight builds. This is normal behavior for testing versions.</div>
             </div>
-            
+
+            <hr style="margin: 30px 0; border: none; border-top: 2px solid #D2691E;">
+
             <h2>🎯 Tips for Best Experience</h2>
             
-            <div class="tips-section">
-                <h3>Getting Started</h3>
-                <ol class="step-list">
-                    <li><strong>Complete Registration</strong> - Get the most out of notifications</li>
-                    <li><strong>Add Your Collection</strong> - Start with a few favorites</li>
-                    <li><strong>Set Location</strong> - Discover local bourbon events</li>
-                    <li><strong>Customize Preferences</strong> - Make the app work for you</li>
-                </ol>
-            </div>
+            <h3>Getting Started</h3>
+            <ol>
+                <li><strong>Complete Registration</strong> - Get the most out of notifications</li>
+                <li><strong>Add Your Collection</strong> - Start with a few favorites</li>
+                <li><strong>Set Location</strong> - Discover local bourbon events</li>
+                <li><strong>Customize Preferences</strong> - Make the app work for you</li>
+            </ol>
 
             <h3>Daily Use</h3>
             <ul>
@@ -564,40 +566,45 @@
                 <li><strong>Photo Management</strong> - Document your collection visually</li>
             </ul>
 
+            <hr style="margin: 30px 0; border: none; border-top: 2px solid #D2691E;">
+
             <h2>🔄 Recent Updates</h2>
             
             <h3>New Features Added</h3>
-            <div class="feature-grid">
-                <div class="feature-card">
-                    <h4>Core Features</h4>
-                    <ul>
-                        <li>Email Registration System</li>
-                        <li>Notification Preferences</li>
-                        <li>Location Integration</li>
-                        <li>Privacy Controls</li>
-                    </ul>
-                </div>
-                <div class="feature-card">
-                    <h4>Advanced Features</h4>
-                    <ul>
-                        <li>Bell Icon Access System</li>
-                        <li>Firebase Integration</li>
-                        <li>Push Notification Permissions</li>
-                        <li>Account Deletion & Recovery</li>
-                    </ul>
-                </div>
+            <div class="feature-list">
+                <ul>
+                    <li><strong>Enhanced Email Registration</strong> - Double-entry confirmation prevents typos</li>
+                    <li><strong>Visual Email Validation</strong> - Real-time feedback when emails match</li>
+                    <li><strong>Change Email Function</strong> - Edit email address without clearing fields</li>
+                    <li><strong>Start Over Option</strong> - Clear fields for fresh input</li>
+                    <li><strong>Improved Privacy Compliance</strong> - Apple App Store ready</li>
+                    <li><strong>Firebase 12.x Integration</strong> - Latest version with privacy manifests</li>
+                    <li><strong>Native Auto Layout</strong> - Improved performance and reliability</li>
+                </ul>
             </div>
 
             <h3>Improvements Made</h3>
             <ul>
-                <li><strong>User Experience</strong> - Smoother onboarding flow</li>
+                <li><strong>User Experience</strong> - Smoother email registration flow</li>
                 <li><strong>Privacy</strong> - Apple-compliant privacy manifest</li>
-                <li><strong>Accessibility</strong> - Streamlined access through bell icon</li>
+                <li><strong>Accessibility</strong> - Multiple ways to access features</li>
                 <li><strong>Security</strong> - Enhanced data protection</li>
                 <li><strong>Permission Handling</strong> - Real-time permission status checking</li>
                 <li><strong>Account Management</strong> - Persistent account state across app launches</li>
-                <li><strong>UI Simplification</strong> - Cleaner interface focused on core features</li>
+                <li><strong>Data Persistence</strong> - Backup/restore system for data protection</li>
             </ul>
+
+            <h3>Technical Enhancements</h3>
+            <div class="success-box">
+                <ul>
+                    <li><strong>Privacy Manifest Compliance</strong> - Meets all Apple App Store requirements</li>
+                    <li><strong>Firebase Integration</strong> - Secure cloud storage and authentication</li>
+                    <li><strong>Location Services</strong> - Multi-API fallback system</li>
+                    <li><strong>Modern UI Framework</strong> - Native iOS Auto Layout constraints</li>
+                </ul>
+            </div>
+
+            <hr style="margin: 30px 0; border: none; border-top: 2px solid #D2691E;">
 
             <h2>📞 Contact & Feedback</h2>
             
@@ -615,17 +622,48 @@
                 <li><strong>Community</strong> - Connect with other bourbon enthusiasts</li>
             </ul>
 
+            <hr style="margin: 30px 0; border: none; border-top: 2px solid #D2691E;">
+
             <h2>🎉 Thank You!</h2>
             <p>Thank you for choosing <strong>My Bourbon Collection</strong>! We're committed to providing you with the best bourbon management experience while respecting your privacy and preferences.</p>
-            
             <p><strong>Happy collecting and tasting!</strong> 🥃✨</p>
 
+            <hr style="margin: 30px 0; border: none; border-top: 2px solid #D2691E;">
+
             <div class="version-info">
-                <strong>Last Updated:</strong> August 2025<br>
-                <strong>Version:</strong> 2.0.5<br>
-                <strong>Features:</strong> Email Registration, Notification Preferences, Location Services, Privacy Controls, Push Notification Permissions, Account Deletion & Recovery, Streamlined UI, Enhanced Features Preparation
+                <p><strong>Last Updated:</strong> August 2025</p>
+                <p><strong>Version:</strong> 2.06</p>
+                <p><strong>Features:</strong> Enhanced Email Registration, Privacy Manifest Compliance, Firebase 12.x Integration, Backup/Restore System, Location Services, Notification Preferences, Account Management</p>
             </div>
         </div>
     </div>
+
+    <a href="#" class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</a>
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Show/hide back to top button
+        window.addEventListener('scroll', function() {
+            const backToTop = document.querySelector('.back-to-top');
+            if (window.pageYOffset > 300) {
+                backToTop.style.display = 'block';
+            } else {
+                backToTop.style.display = 'none';
+            }
+        });
+    </script>
 </body>
 </html>
