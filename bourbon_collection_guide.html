@@ -1,1080 +1,501 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🥃 My Bourbon Collection - User's Guide</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🥃 My Bourbon Collection - User's Guide</title>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --brown:#7A3B10; --dark:#3D1A05; --amber:#C8620A; --gold:#D4952A;
+  --cream:#FAF6EF; --paper:#F2EBE0; --charcoal:#2E2015; --muted:#7A6452;
+  --rule:#D4B896; --sw:280px;
+}
+body { font-family:Georgia,'Times New Roman',serif; background:var(--cream); color:var(--charcoal); min-height:100vh; overflow-x:hidden; }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-        }
+/* TOP BAR */
+#topbar { position:fixed; top:0; left:0; right:0; height:58px; background:var(--dark); display:flex; align-items:center; padding:0 20px; gap:14px; z-index:300; box-shadow:0 2px 10px rgba(0,0,0,.4); }
+#topbar h1 { font-family:Georgia,serif; font-size:1rem; font-weight:bold; color:#F5DEB3; letter-spacing:.02em; line-height:1.25; }
+#topbar h1 span { color:var(--gold); }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+/* HAMBURGER */
+#ham { background:none; border:none; cursor:pointer; display:flex; flex-direction:column; gap:5px; padding:6px; flex-shrink:0; }
+#ham span { display:block; width:22px; height:2px; background:#F5DEB3; border-radius:2px; transition:transform .28s,opacity .2s; }
+#ham.open span:nth-child(1){ transform:translateY(7px) rotate(45deg); }
+#ham.open span:nth-child(2){ opacity:0; }
+#ham.open span:nth-child(3){ transform:translateY(-7px) rotate(-45deg); }
 
-        .header {
-            padding: 12px 0;
-            margin-bottom: 16px;
-            border-bottom: 2px solid #8B4513;
-        }
+/* OVERLAY */
+#overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:200; }
+#overlay.on { display:block; }
 
-        .header h1 {
-            font-size: 1.5rem;
-            color: #8B4513;
-            margin: 0;
-        }
+/* SIDEBAR */
+#sidebar { position:fixed; top:0; left:0; width:var(--sw); height:100vh; background:var(--dark); z-index:250; transform:translateX(-100%); transition:transform .3s cubic-bezier(.4,0,.2,1); overflow-y:auto; }
+#sidebar.open { transform:translateX(0); }
+.sb-head { padding:70px 18px 14px; border-bottom:1px solid rgba(212,149,42,.3); }
+.sb-head p { font-family:Arial,sans-serif; font-size:.7rem; text-transform:uppercase; letter-spacing:.12em; color:#C49A6A; font-weight:700; }
+#navlist { list-style:none; padding:8px 0 40px; }
+#navlist li button { width:100%; background:none; border:none; cursor:pointer; text-align:left; padding:10px 18px; display:flex; align-items:center; gap:10px; color:#E8D5BE; font-family:Arial,Helvetica,sans-serif; font-size:.88rem; border-left:3px solid transparent; transition:background .15s,border-color .15s; }
+#navlist li button:hover { background:rgba(210,105,30,.18); border-left-color:var(--amber); }
+#navlist li button.active { background:rgba(210,105,30,.22); border-left-color:var(--gold); color:#F5DEB3; font-weight:700; }
+.ni { font-size:1rem; width:20px; text-align:center; }
 
-        .header p {
-            font-size: 0.9rem;
-            color: #666;
-            margin: 4px 0 0 0;
-        }
+/* MAIN */
+#main { padding-top:58px; }
 
-        .content {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            margin-bottom: 30px;
-        }
+/* HERO */
+#hero { background:linear-gradient(150deg,var(--dark) 0%,#5C2008 100%); padding:44px 32px 40px; text-align:center; }
+#hero .hico { font-size:2.6rem; display:block; margin-bottom:10px; }
+#hero h2 { font-family:Georgia,serif; color:#F5DEB3; font-size:1.55rem; font-weight:bold; margin-bottom:22px; line-height:1.3; }
+.qw { max-width:520px; margin:0 auto; border-left:3px solid var(--gold); background:rgba(255,255,255,.07); border-radius:0 8px 8px 0; padding:14px 18px; text-align:left; }
+.qw blockquote { font-style:italic; color:#D9BF9A; font-size:.95rem; line-height:1.65; }
+.qw cite { display:block; margin-top:8px; font-style:normal; font-size:.75rem; color:var(--gold); text-transform:uppercase; letter-spacing:.08em; font-family:Arial,sans-serif; }
 
-        h2 {
-            color: #8B4513;
-            font-size: 1.8rem;
-            margin: 30px 0 20px 0;
-            padding-bottom: 10px;
-            border-bottom: 3px solid #D2691E;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+/* CONTENT */
+#content { max-width:820px; margin:0 auto; padding:36px 28px 80px; }
+.panel { display:none; }
+.panel.active { display:block; animation:fi .22s ease; }
+@keyframes fi { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
 
-        h3 {
-            color: #A0522D;
-            font-size: 1.4rem;
-            margin: 25px 0 15px 0;
-            padding-left: 10px;
-            border-left: 4px solid #D2691E;
-        }
+/* TYPOGRAPHY */
+.panel > h2 { font-family:Georgia,serif; color:var(--dark); font-size:1.5rem; margin-bottom:4px; }
+.sub { font-family:Arial,sans-serif; font-size:.84rem; color:var(--muted); margin-bottom:24px; padding-bottom:16px; border-bottom:2px solid var(--rule); }
+h3 { font-family:Georgia,serif; color:var(--brown); font-size:1.12rem; margin:26px 0 10px; }
+h4 { font-family:Arial,sans-serif; font-weight:700; color:var(--amber); font-size:.8rem; text-transform:uppercase; letter-spacing:.07em; margin:16px 0 7px; }
+p { margin-bottom:13px; line-height:1.72; font-size:.95rem; }
+ul,ol { margin:8px 0 14px 20px; }
+li { margin-bottom:6px; line-height:1.6; font-size:.93rem; }
+li strong { color:var(--dark); }
+hr { border:none; border-top:1px solid var(--rule); margin:22px 0; }
 
-        h4 {
-            color: #CD853F;
-            font-size: 1.2rem;
-            margin: 20px 0 10px 0;
-        }
+/* CARDS */
+.card { background:#fff; border:1px solid var(--rule); border-radius:8px; padding:18px 20px; margin:14px 0; box-shadow:0 1px 6px rgba(139,69,19,.07); }
+.ca { border-left:4px solid var(--amber); background:var(--paper); }
+.cb { border-left:4px solid #4682B4; background:#F0F7FF; }
+.cg { border-left:4px solid #3A8B3A; background:#F0FFF0; }
+.cr { border-left:4px solid #C0392B; background:#FFF5F5; }
 
-        p {
-            margin-bottom: 15px;
-            font-size: 1rem;
-        }
+/* STEPS */
+.steps { list-style:none; margin-left:0; counter-reset:s; }
+.steps li { counter-increment:s; position:relative; padding:11px 14px 11px 48px; margin-bottom:7px; background:#fff; border:1px solid var(--rule); border-radius:7px; font-size:.93rem; line-height:1.6; }
+.steps li::before { content:counter(s); position:absolute; left:12px; top:50%; transform:translateY(-50%); width:24px; height:24px; border-radius:50%; background:var(--dark); color:#F5DEB3; display:flex; align-items:center; justify-content:center; font-size:.78rem; font-weight:bold; font-family:Arial,sans-serif; }
 
-        ul, ol {
-            margin: 15px 0 15px 30px;
-        }
+/* FEAT GRID */
+.fg { display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:10px; margin:14px 0; }
+.fi { background:#fff; border:1px solid var(--rule); border-radius:7px; padding:12px 14px; display:flex; gap:10px; align-items:flex-start; }
+.fic { font-size:1.3rem; flex-shrink:0; }
+.fit strong { display:block; font-size:.85rem; color:var(--dark); margin-bottom:2px; }
+.fit span { font-size:.8rem; color:var(--muted); line-height:1.4; }
 
-        li {
-            margin-bottom: 8px;
-        }
+/* FAQ */
+.faq-item { border:1px solid var(--rule); border-radius:7px; margin-bottom:8px; background:#fff; overflow:hidden; }
+.fq { width:100%; background:none; border:none; cursor:pointer; text-align:left; padding:13px 16px; display:flex; justify-content:space-between; align-items:center; font-family:Arial,sans-serif; font-weight:700; color:var(--dark); font-size:.88rem; transition:background .15s; }
+.fq:hover { background:var(--paper); }
+.fa-arr { font-size:.7rem; color:var(--amber); flex-shrink:0; margin-left:10px; transition:transform .22s; }
+.fq.open .fa-arr { transform:rotate(180deg); }
+.fa { max-height:0; overflow:hidden; padding:0 16px; font-family:Arial,sans-serif; font-size:.88rem; line-height:1.65; color:#3D2210; transition:max-height .28s ease,padding .18s; }
+.fa.open { max-height:500px; padding:0 16px 14px; }
 
-        .highlight-box {
-            border-left: 4px solid #D2691E;
-            padding: 12px 16px;
-            margin: 16px 0;
-            background: #fafafa;
-        }
+/* VERSION */
+.vb { background:linear-gradient(135deg,#EDE5F5,#F0F0FF); border:2px solid #9370DB; border-radius:9px; padding:18px 22px; margin:18px 0; text-align:center; font-family:Arial,sans-serif; }
+.vb p { color:#5A3890; margin-bottom:5px; font-size:.9rem; }
 
-        .quote-block {
-            border-left: 4px solid #A0522D;
-            padding: 8px 12px;
-            margin: 12px 0;
-            font-style: italic;
-            color: #555;
-        }
-
-        .feature-list {
-            background: linear-gradient(135deg, #F0F8FF 0%, #E6F3FF 100%);
-            border: 2px solid #4682B4;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-        }
-
-        .warning-box {
-            background: linear-gradient(135deg, #FFF5EE 0%, #FFE4E1 100%);
-            border: 2px solid #FF6347;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-        }
-
-        .success-box {
-            background: linear-gradient(135deg, #F0FFF0 0%, #E6FFE6 100%);
-            border: 2px solid #32CD32;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-        }
-
-        .faq-item {
-            background: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
-            padding: 20px;
-            margin: 15px 0;
-        }
-
-        .faq-question {
-            font-weight: bold;
-            color: #8B4513;
-            margin-bottom: 10px;
-        }
-
-        .faq-answer {
-            color: #555;
-        }
-
-        .version-info {
-            background: linear-gradient(135deg, #E6E6FA 0%, #F0F8FF 100%);
-            border: 2px solid #9370DB;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px 0;
-            text-align: center;
-        }
-
-        .emoji {
-            font-size: 1.2em;
-        }
-
-        .back-to-top {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #8B4513;
-            color: white;
-            padding: 15px;
-            border-radius: 50%;
-            text-decoration: none;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            transition: all 0.3s ease;
-        }
-
-        .back-to-top:hover {
-            background: #A0522D;
-            transform: translateY(-2px);
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-            
-            .content {
-                padding: 20px;
-            }
-            
-            .header h1 {
-                font-size: 1.35rem;
-            }
-        }
-    </style>
+@media(max-width:540px){
+  #content { padding:24px 16px 60px; }
+  #hero { padding:32px 16px 30px; }
+  #hero h2 { font-size:1.25rem; }
+  .fg { grid-template-columns:1fr; }
+}
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>🥃 My Bourbon Collection - User's Guide</h1>
-            <p>Your personal digital companion for managing and tracking your bourbon collection, tastings, and discovering new releases</p>
-        </div>
 
-        <div class="content">
-            <div class="quote-block">
-                <p style="margin: 0; font-size: 1rem;">"A good bourbon should make you smile, whether it's from the taste or the memories it brings back. That's what this whole collection business is about, isn't it?" — Colonel Wood</p>
-            </div>
-
-            <h2>📱 Welcome to Your Bourbon Collection</h2>
-            <p><strong>My Bourbon Collection</strong> is your personal digital companion for managing and tracking your bourbon collection, tastings, and discovering new releases. This guide will walk you through all the features and help you get the most out of your bourbon journey.</p>
-
-            <hr style="margin: 30px 0; border: none; border-top: 2px solid #D2691E;">
-
-            <h2>🚀 Getting Started</h2>
-            
-            <h3>First Launch Experience</h3>
-            <p>When you first open the app, you'll experience a smooth onboarding flow:</p>
-            <ol>
-                <li><strong>Launch Screen</strong> - Beautiful bourbon-themed welcome</li>
-                <li><strong>Permissions Screen</strong> - Request access to camera, location, photo library, and push notifications</li>
-                <li><strong>Email Registration</strong> - Stay in the loop with bourbon news and events</li>
-            </ol>
-
-            <h3>📧 Email Registration - "Stay in the Loop"</h3>
-            
-            <h4>Why Register?</h4>
-            <ul>
-                <li>Get notified about app updates and new features</li>
-                <li>Receive alerts about bourbon tastings in your area</li>
-                <li>Learn about new bourbon releases from your favorite distilleries</li>
-                <li>Monthly reminders and exclusive content</li>
-            </ul>
-
-            <div class="feature-list">
-                <h4>Enhanced Registration Process:</h4>
-                <ul>
-                    <li><strong>Double Email Entry</strong> - Enter your email twice to prevent typos</li>
-                    <li><strong>Real-time Validation</strong> - Visual feedback shows when emails match</li>
-                    <li><strong>Email Confirmation</strong> - Both fields must match before proceeding</li>
-                    <li><strong>Change Email Option</strong> - Edit your email address if needed</li>
-                    <li><strong>Start Over Button</strong> - Clear both fields for fresh input</li>
-                </ul>
-            </div>
-
-            <h4>Registration Options:</h4>
-            <ul>
-                <li><strong>Enter Email + Confirm</strong> - Full access to all notifications</li>
-                <li><strong>Skip for Now</strong> - You can always register later</li>
-                <li><strong>Manage Preferences</strong> - Control what you receive</li>
-            </ul>
-
-            <h4>Monthly Reminders:</h4>
-            <ul>
-                <li>If you skip registration, we'll gently remind you every 30 days</li>
-                <li>You can register anytime from the main app</li>
-            </ul>
-
-            <h4>Push Notifications:</h4>
-            <ul>
-                <li>The app will request permission to send you push notifications</li>
-                <li>This allows you to receive timely alerts even when the app is closed</li>
-                <li>You can change this permission anytime in iOS Settings</li>
-            </ul>
-
-            <hr style="margin: 30px 0; border: none; border-top: 2px solid #D2691E;">
-
-            <h2>🏠 Main App Interface</h2>
-            
-            <div class="highlight-box">
-                <h3>🔄 Three Vaults (Unified Interface)</h3>
-                <p>The app uses a <strong>unified interface</strong> with <strong>three vaults</strong>—<strong>Collection</strong>, <strong>Tastings</strong>, and <strong>Hunt</strong>. Switch vaults by tapping <strong>Modes</strong> in the bottom toolbar and choosing a vault. The header and list content update for the active vault.</p>
-                <ul>
-                    <li><strong>Collection</strong> – Your owned bottles, with ratings, stats, filters, list/grid view, and estimated value</li>
-                    <li><strong>Tastings</strong> – Your tasting experiences, notes, and ratings</li>
-                    <li><strong>Hunt</strong> – Bottles you spot in the wild (stores, bars, events), with photos, prices, and open/closed status</li>
-                </ul>
-                <p>The <strong>+</strong> button label changes by vault: "Add Bourbon," "Add Tasting," or "Add Hunt."</p>
-            </div>
-
-            <h3>Search Bar (Vault Search)</h3>
-            <p>Directly under the banner, a <strong>search bar</strong> filters the <em>current vault</em> only (Collection, Tastings, or Hunt). Tap × to clear; keyboard dismisses on scroll, tap elsewhere, or clear.</p>
-
-            <h3>Bottom Toolbar</h3>
-            <p>A single floating bar at the bottom of the screen (rounded, translucent) shows these buttons <strong>left to right</strong>:</p>
-            <ul>
-                <li><strong>Account</strong> (person icon) – Opens the <strong>Account &amp; Status</strong> sheet. At the top it shows status (in Collection: bottle count and value; in Tasting/Hunt: a message to switch to Collection for stats). Two options: <strong>Notifications &amp; preferences</strong> and <strong>Backup &amp; Restore</strong>.</li>
-                <li><strong>Modes</strong> (cabinet icon) – Opens the <strong>Modes &amp; Tools</strong> sheet with two sections: <strong>Switch Vault</strong> (choose Collection, Tasting, or Hunt) and <strong>Tools</strong> (Kiosk Mode, Consult the Colonel).</li>
-                <li><strong>View</strong> (filter/status icon) – Opens the <strong>View options</strong> sheet: Search, Filter, Sort; in Collection mode only, also List View / Grid View and Share Open Bottles.</li>
-                <li><strong>Help</strong> (?) – Opens this User's Guide. <strong>This button is only visible when you are in Collection vault.</strong> In Tasting or Hunt, the Help button is hidden; switch to Collection via Modes to see it.</li>
-                <li><strong>Add</strong> (+) – Adds an item for the current vault: Add Bourbon (Collection), Add Tasting (Tasting), or Add Hunt (Hunt).</li>
-            </ul>
-
-            <h3>View Options Sheet</h3>
-            <p>Tapping <strong>View</strong> opens a sheet titled <strong>View options</strong> with: Search, Filter, Sort. When you are in Collection vault, the sheet also includes List View / Grid View and Share Open Bottles.</p>
-
-            <h3>Modes &amp; Tools Sheet</h3>
-            <p>Tapping <strong>Modes</strong> opens a sheet titled <strong>Modes &amp; Tools</strong>. Section <strong>Switch Vault</strong> lets you choose Collection, Tasting, or Hunt (current vault has a checkmark). Section <strong>Tools</strong> has Kiosk Mode and Consult the Colonel.</p>
-
-            <hr style="margin: 30px 0; border: none; border-top: 2px solid #D2691E;">
-
-            <h2>📚 Managing Your Collection</h2>
-            
-            <h3>Adding Bourbons</h3>
-            <ol>
-                <li>Switch to <strong>Collection</strong> vault via Modes if needed</li>
-                <li>Tap the <strong>+</strong> button (title shows "Add Bourbon")</li>
-                <li>Fill in bourbon details:
-                    <ul>
-                        <li><strong>Name</strong> * - Bourbon brand and expression (required)</li>
-                        <li><strong>Proof</strong> * - Alcohol content (required)</li>
-                        <li><strong>ABV</strong> - Alcohol by volume percentage</li>
-                        <li><strong>🎯 Col Wood's Professional Review</strong> - Get professional bourbon reviews from Colonel Wood</li>
-                        <li><strong>Purchase Location</strong> - Where you bought it (2-city-block search)</li>
-                        <li><strong>Review and Rating</strong> - Your tasting notes and ratings</li>
-                        <li><strong>Price</strong> * - How much you paid (required)</li>
-                        <li><strong>Size</strong> - Bottle size (750ml, 1L, etc.)</li>
-                        <li><strong>Purchase Date</strong> - When you acquired it</li>
-                        <li><strong>Date Opened</strong> - When you first opened it</li>
-                        <li><strong>Date Emptied</strong> - When you finished it</li>
-                        <li><strong>Rating</strong> - Your personal rating (1-5 stars)</li>
-                        <li><strong>Fill Level</strong> - How much is left in the bottle</li>
-                        <li><strong>Notes</strong> - Personal observations and memories</li>
-                        <li><strong>Photos</strong> - Add bottle and label images</li>
-                        </ul>
-                    </li>
-                </ol>
-            
-            <div class="highlight-box">
-                <h4>🎯 New: Col Wood's Professional Review System</h4>
-                <p><strong>Col Wood's Bourbon Reviews:</strong> Get professional-quality bourbon descriptions generated by the all knowing Col Wood (our version of the Wizard of Oz). Simply enter a bourbon name and tap the "Col Wood's Professional Review" button to receive a detailed, 250-character review that you can copy to the Review and Rating field.</p>
-                <p><strong>How It Works:</strong></p>
-                <ol>
-                    <li>Enter the bourbon name in the Name field</li>
-                    <li>Tap the "Col Wood's Professional Review" button</li>
-                    <li>Choose to copy the Col's review to your Review and Rating field or just close the popup</li>
-                </ol>
-                <p><strong>Benefits:</strong> Professional-quality descriptions, complete sentences, 250 character limits, and full user control over when and how to use Col Wood's reviews.</p>
-            </div>
-
-            <h3>Organizing Your Collection</h3>
-            <h4>Sort Options:</h4>
-            <ul>
-                <li>Name (A-Z or Z-A)</li>
-                <li>Proof (Low to High or High to Low)</li>
-                <li>Date (Oldest to Newest or Newest to Oldest)</li>
-                <li>Rating (Low to High or High to High)</li>
-            </ul>
-
-            <h4>View Options:</h4>
-            <ul>
-                <li><strong>List View</strong> - Compact, detailed information</li>
-                <li><strong>Grid View</strong> - Visual, photo-focused layout</li>
-            </ul>
-
-            <h3>Editing and Updating</h3>
-            <ul>
-                <li><strong>Tap any bourbon</strong> to view details</li>
-                <li><strong>Edit button</strong> to modify information</li>
-                <li><strong>Delete option</strong> for removing from collection</li>
-            </ul>
-
-            <hr style="margin: 30px 0; border: none; border-top: 2px solid #D2691E;">
-
-            <h2>✨ Consult the Colonel - Personalized Recommendations</h2>
-            
-            <div class="highlight-box">
-                <h3>Get Expert Bourbon Recommendations</h3>
-                <p><strong>Consult the Colonel</strong> provides personalized bourbon recommendations from your own collection based on your current mood and flavor preferences. Colonel Wood, our Southern gentleman bourbon expert, will study your collection and suggest the perfect bottle for any occasion.</p>
-            </div>
-
-            <h3>How to Use</h3>
-            <ol>
-                <li><strong>Tap Modes</strong> in the bottom toolbar to open the Modes &amp; Tools sheet, then under <strong>Tools</strong> tap <strong>Consult the Colonel</strong></li>
-                <li><strong>Enter your mood or occasion:</strong>
-                    <ul>
-                        <li><strong>Quick Selection:</strong> Tap pre-selected buttons like [Relaxing], [Celebrating], [Social Gathering], [Quiet Evening], or [Special Occasion]</li>
-                        <li><strong>Custom Input:</strong> Type your own mood description</li>
-                        <li>Examples: "Relaxing evening by the fireplace", "Celebrating with friends", "Trying something bold"</li>
-                    </ul>
-                </li>
-                <li><strong>Describe your desired flavor profile:</strong>
-                    <ul>
-                        <li><strong>Quick Selection:</strong> Tap pre-selected buttons like [Spicy], [Sweet], [Oak Forward], [Smooth], [Bold], or [Vanilla]</li>
-                        <li><strong>Custom Input:</strong> Type your own flavor preferences</li>
-                        <li>Examples: "Sweet, vanilla-forward, and easy-drinking", "Spicy and complex", "Smooth and mellow"</li>
-                        <li><strong>Tip:</strong> You can combine multiple quick selections or mix them with custom text</li>
-                    </ul>
-                </li>
-                <li><strong>Tap "Consult the Colonel"</strong> and wait for Colonel Wood's recommendation</li>
-            </ol>
-
-            <h3>What You'll Get</h3>
-            <p>Colonel Wood will:</p>
-            <ul>
-                <li><strong>Review your collection</strong> (only considers bottles that aren't empty)</li>
-                <li><strong>Match your mood and preferences</strong> to the perfect bourbon</li>
-                <li><strong>Provide a personalized rating</strong> (1-5 stars) with his charming review</li>
-                <li><strong>Explain why</strong> this bourbon fits your needs</li>
-            </ul>
-
-            <div class="feature-list">
-                <h3>Features</h3>
-                <ul>
-                    <li><strong>Smart Selection</strong> - Only recommends from your available (non-empty) bottles</li>
-                    <li><strong>Personalized Reviews</strong> - Concise, charming reviews (425 characters) in Colonel Wood's Southern gentleman voice</li>
-                    <li><strong>Mood Matching</strong> - Considers your occasion and desired experience</li>
-                    <li><strong>Flavor Focus</strong> - Matches your preferred taste profile</li>
-                    <li><strong>Quick Access</strong> - Tap the recommendation to view full bourbon details</li>
-                    <li><strong>Try Again</strong> - Get a new recommendation anytime</li>
-                </ul>
-            </div>
-
-            <h3>Tips for Best Results</h3>
-            <ul>
-                <li><strong>Be specific</strong> about your mood and occasion for better matches</li>
-                <li><strong>Describe flavors</strong> you're craving (sweet, spicy, smooth, bold, etc.)</li>
-                <li><strong>Try different combinations</strong> - same bourbon can fit different moods</li>
-                <li><strong>View details</strong> to see why Colonel Wood recommended it</li>
-                <li><strong>Experiment</strong> with different mood/flavor combinations</li>
-            </ul>
-
-            <div class="success-box">
-                <h4>Example Recommendations</h4>
-                <p><strong>Scenario 1: Quiet Evening</strong></p>
-                <ul>
-                    <li>Mood: "Relaxing evening by the fireplace"</li>
-                    <li>Flavor: "Sweet, vanilla-forward, and easy-drinking"</li>
-                    <li>Result: Smooth, lower-proof bourbon perfect for sipping</li>
-                </ul>
-                <p><strong>Scenario 2: Special Occasion</strong></p>
-                <ul>
-                    <li>Mood: "Celebrating a milestone"</li>
-                    <li>Flavor: "Complex, bold, and memorable"</li>
-                    <li>Result: Premium, high-proof bourbon for the occasion</li>
-                </ul>
-            </div>
-
-            <hr style="margin: 30px 0; border: none; border-top: 2px solid #D2691E;">
-
-            <h2>🍷 Tasting Notes & Reviews</h2>
-            
-            <h3>Recording Tastings</h3>
-            <ol>
-                <li><strong>Add Tasting</strong> from bourbon detail view</li>
-                <li><strong>Rate</strong> your experience (1-5 stars)</li>
-                <li><strong>Add Notes:</strong>
-                    <ul>
-                        <li>Nose (aroma)</li>
-                        <li>Palate (taste)</li>
-                        <li>Finish (aftertaste)</li>
-                        <li>Overall impressions</li>
-                    </ul>
-                </li>
-            </ol>
-
-            <h3>Tasting History</h3>
-            <ul>
-                <li>Track how your palate evolves</li>
-                <li>Compare different expressions</li>
-                <li>Remember your favorites</li>
-            </ul>
-
-            <hr style="margin: 30px 0; border: none; border-top: 2px solid #D2691E;">
-
-            <h2>📍 Location Features</h2>
-            
-            <h3>Smart Location Search</h3>
-            <ul>
-                <li><strong>2-City-Block Radius</strong> - 400 meters maximum search distance</li>
-                <li><strong>Local Focus</strong> - Only businesses within walking distance</li>
-                <li><strong>Consistent Results</strong> - 30-minute cache for reliable listings</li>
-                <li><strong>No More Confusion</strong> - Eliminates businesses 20+ miles away</li>
-            </ul>
-
-            <h3>Location Services</h3>
-            <ul>
-                <li><strong>Automatic Detection</strong> - App detects your city/state</li>
-                <li><strong>Privacy-Focused</strong> - Only general location (no exact coordinates)</li>
-                <li><strong>Local Events</strong> - Find bourbon tastings near you</li>
-                <li><strong>Business Search</strong> - Find liquor stores, bars, restaurants nearby</li>
-            </ul>
-
-            <h3>Location Permissions</h3>
-            <ul>
-                <li><strong>First Launch</strong> - Courtesy request for location access</li>
-                <li><strong>Optional</strong> - You can decline and still use the app</li>
-                <li><strong>Privacy First</strong> - Your exact location is never stored</li>
-            </ul>
-
-            <div class="feature-list">
-                <h4>🎯 Enhanced Location Search Benefits:</h4>
-                <ul>
-                    <li><strong>Focused Results</strong> - Only businesses within 2 city blocks appear</li>
-                    <li><strong>Walking Distance</strong> - All results are easily accessible on foot</li>
-                    <li><strong>Consistent Experience</strong> - Same businesses appear reliably due to smart caching</li>
-                    <li><strong>Local Business Support</strong> - Discover and support nearby establishments</li>
-                    <li><strong>Accurate Distances</strong> - Precise distance calculations to each business</li>
-                </ul>
-            </div>
-
-            <hr style="margin: 30px 0; border: none; border-top: 2px solid #D2691E;">
-
-            <h2>🔔 Notification Preferences</h2>
-            
-            <h3>Managing Your Preferences</h3>
-            <p>Access from <strong>anywhere</strong> in the app:</p>
-            <ol>
-                <li><strong>Account</strong> button in the bottom toolbar – opens Account &amp; Status sheet with <strong>Notifications &amp; preferences</strong> and <strong>Backup &amp; Restore</strong></li>
-            </ol>
-
-            <h3>Preference Options</h3>
-            <ul>
-                <li><strong>App Updates</strong> - New features and improvements</li>
-                <li><strong>Bourbon Tastings</strong> - Events in your area</li>
-                <li><strong>Bourbon Releases</strong> - New products from distilleries</li>
-                <li><strong>Monthly Reminders</strong> - Periodic updates and tips</li>
-                <li><strong>Push Notifications</strong> - In-app alerts</li>
-                <li><strong>Email Notifications</strong> - Email updates</li>
-            </ul>
-
-            <h3>Unsubscribe Options</h3>
-            <ul>
-                <li><strong>Individual Toggles</strong> - Turn specific notifications on/off</li>
-                <li><strong>Unsubscribe All</strong> - Disable all notifications at once</li>
-                <li><strong>Resubscribe</strong> - Re-enable notifications anytime</li>
-                <li><strong>Account Deletion</strong> - Remove all data permanently</li>
-            </ul>
-
-            <hr style="margin: 30px 0; border: none; border-top: 2px solid #D2691E;">
-
-            <h2>⚙️ App Settings</h2>
-            
-            <h3>Account Management</h3>
-            <p>Tap the <strong>Account</strong> button in the bottom toolbar to open the <strong>Account &amp; Status</strong> sheet. From there you can open Notifications &amp; preferences or Backup &amp; Restore.</p>
-            <ul>
-                <li><strong>Email</strong> - View and update your registered email address</li>
-                <li><strong>Registration Date</strong> - See when you joined</li>
-                <li><strong>Last Login</strong> - Recent activity timestamp</li>
-                <li><strong>Update Location</strong> - Refresh your current location</li>
-                <li><strong>Delete Account</strong> - Permanent removal (cannot be undone)</li>
-            </ul>
-
-            <hr style="margin: 30px 0; border: none; border-top: 2px solid #D2691E;">
-
-            <h2>📄 Terms of Use</h2>
-            
-            <h3>Acceptance of Terms</h3>
-            <p>By downloading, installing, accessing, or using <strong>My Bourbon Collection</strong> ("the App"), you agree to be bound by these Terms of Use. If you do not agree to these terms, please do not use the App.</p>
-
-            <h3>Use of the App</h3>
-            <ul>
-                <li><strong>Eligibility:</strong> You must be of legal drinking age in your jurisdiction to use this App</li>
-                <li><strong>Account Responsibility:</strong> You are responsible for maintaining the confidentiality of your account information</li>
-                <li><strong>Prohibited Uses:</strong> You may not use the App for any illegal purpose or to violate any laws</li>
-                <li><strong>Collection Content:</strong> You retain ownership of all data you enter into the App, but grant us a license to store and process it</li>
-            </ul>
-
-            <h3>Intellectual Property</h3>
-            <ul>
-                <li><strong>App Ownership:</strong> The App, including its design, features, and functionality, is owned by us</li>
-                <li><strong>Your Content:</strong> You retain all rights to the bourbon collection data and content you create</li>
-                <li><strong>Col Wood's Reviews:</strong> Reviews generated by Col Wood's Professional Review System are provided for your use</li>
-            </ul>
-
-            <h3>Col Wood's Review Service</h3>
-            <p>By using the Col Wood's Professional Review feature, you acknowledge:</p>
-            <ul>
-                <li>Reviews provided by Colonel Wood are based on his expertise and knowledge</li>
-                <li>You use Col Wood's reviews at your own discretion</li>
-                <li>We are not responsible for the accuracy of reviews provided by Colonel Wood</li>
-            </ul>
-
-            <h3>Location Services</h3>
-            <ul>
-                <li><strong>Optional Feature:</strong> Location services are optional and can be disabled at any time</li>
-                <li><strong>Accuracy:</strong> Location data is approximate (city/state level) and may not always be precise</li>
-                <li><strong>Third-Party Services:</strong> Location data is provided by third-party services (Apple Location Services, Google Places API)</li>
-            </ul>
-
-            <h3>Account Termination</h3>
-            <ul>
-                <li><strong>User Termination:</strong> You may delete your account at any time through the App settings</li>
-                <li><strong>Company Termination:</strong> We reserve the right to suspend or terminate accounts that violate these terms</li>
-                <li><strong>Data Deletion:</strong> Upon account deletion, your data will be permanently removed as described in our Privacy Policy</li>
-            </ul>
-
-            <h3>Disclaimer of Warranties</h3>
-            <p>The App is provided "as is" without warranties of any kind. We do not guarantee:</p>
-            <ul>
-                <li>Uninterrupted or error-free operation</li>
-                <li>Accuracy of Col Wood's reviews</li>
-                <li>Availability of third-party services (location, etc.)</li>
-                <li>Completeness of bourbon databases or information</li>
-            </ul>
-
-            <h3>Limitation of Liability</h3>
-            <p>To the maximum extent permitted by law, we shall not be liable for:</p>
-            <ul>
-                <li>Loss of data or collection information</li>
-                <li>Inaccurate reviews or recommendations from Colonel Wood</li>
-                <li>Incorrect location data or search results</li>
-                <li>Any indirect, incidental, or consequential damages</li>
-            </ul>
-
-            <h3>Changes to Terms</h3>
-            <p>We reserve the right to modify these Terms of Use at any time. Continued use of the App after changes constitutes acceptance of the modified terms.</p>
-
-            <h3>Governing Law</h3>
-            <p>These Terms of Use shall be governed by and construed in accordance with applicable local laws.</p>
-
-            <div class="warning-box">
-                <h4>⚠️ Important:</h4>
-                <p>Please read these Terms carefully. By using the App, you acknowledge that you have read, understood, and agree to be bound by these Terms of Use.</p>
-            </div>
-
-            <hr style="margin: 30px 0; border: none; border-top: 2px solid #D2691E;">
-
-            <h2>🔒 Privacy Policy</h2>
-            
-            <h3>Effective Date</h3>
-            <p><strong>Last Updated:</strong> October 2025</p>
-            <p>This Privacy Policy describes how we collect, use, and protect your personal information when you use <strong>My Bourbon Collection</strong>.</p>
-
-            <h3>Information We Collect</h3>
-            
-            <h4>Personal Information</h4>
-            <ul>
-                <li><strong>Email Address:</strong> Collected during optional registration for notifications and account management</li>
-                <li><strong>Registration Date:</strong> Automatically recorded when you register</li>
-                <li><strong>Last Login:</strong> Tracked for account security purposes</li>
-            </ul>
-
-            <h4>Collection Data</h4>
-            <ul>
-                <li><strong>Bourbon Information:</strong> Names, proof, ABV, prices, purchase locations, dates, ratings, reviews, and notes</li>
-                <li><strong>Photos:</strong> Bottle and label images you upload</li>
-                <li><strong>Tasting Notes:</strong> Your personal tasting experiences and ratings</li>
-            </ul>
-
-            <h4>Location Information</h4>
-            <ul>
-                <li><strong>General Location:</strong> City and state for local event recommendations (approximate, not exact coordinates)</li>
-                <li><strong>Search History:</strong> Purchase locations you search for (stored locally on device)</li>
-                <li><strong>Location Permissions:</strong> Optional and can be revoked at any time through iOS Settings</li>
-            </ul>
-
-            <h4>Usage Information</h4>
-            <ul>
-                <li><strong>App Usage:</strong> Feature usage statistics to improve the App</li>
-                <li><strong>Error Reports:</strong> Crash logs and error information to fix bugs</li>
-                <li><strong>Device Information:</strong> Device type, iOS version for compatibility</li>
-            </ul>
-
-            <h3>How We Use Your Information</h3>
-            
-            <h4>Service Provision</h4>
-            <ul>
-                <li>Provide and maintain the App's core functionality</li>
-                <li>Store and sync your bourbon collection data</li>
-                <li>Generate bourbon reviews and recommendations from Colonel Wood</li>
-                <li>Facilitate location-based searches for purchase locations</li>
-            </ul>
-
-            <h4>Notifications</h4>
-            <ul>
-                <li>Send app update notifications (if enabled)</li>
-                <li>Notify you about bourbon tastings in your area (if enabled)</li>
-                <li>Alert you about new bourbon releases (if enabled)</li>
-                <li>Send monthly reminders and tips (if enabled)</li>
-            </ul>
-
-            <h4>Improvement</h4>
-            <ul>
-                <li>Analyze usage patterns to improve features</li>
-                <li>Fix bugs and errors</li>
-                <li>Develop new features based on user needs</li>
-            </ul>
-
-            <h3>Information Sharing and Disclosure</h3>
-            
-            <h4>We Do Not Sell Your Data</h4>
-            <p>We do not sell, rent, or trade your personal information to third parties.</p>
-
-            <h4>Service Providers</h4>
-            <p>We may share data with trusted service providers who assist in operating the App:</p>
-            <ul>
-                <li><strong>Firebase (Google):</strong> Cloud storage and authentication services</li>
-                <li><strong>Review Services:</strong> Bourbon review generation via Colonel Wood</li>
-                <li><strong>Apple Location Services:</strong> Location detection and mapping</li>
-                <li><strong>Google Places API:</strong> Business location search</li>
-            </ul>
-            <p>These providers are bound by confidentiality agreements and only use your data as necessary to provide services.</p>
-
-            <h4>Legal Requirements</h4>
-            <p>We may disclose information if required by law or to:</p>
-            <ul>
-                <li>Comply with legal obligations</li>
-                <li>Protect our rights and safety</li>
-                <li>Respond to legal requests</li>
-            </ul>
-
-            <h3>Data Security</h3>
-            <ul>
-                <li><strong>Encryption:</strong> Data transmitted to our servers is encrypted using industry-standard protocols</li>
-                <li><strong>Secure Storage:</strong> Data is stored securely using Firebase with proper access controls</li>
-                <li><strong>Authentication:</strong> Account access requires secure authentication</li>
-                <li><strong>Privacy Manifest:</strong> App complies with Apple's privacy requirements</li>
-            </ul>
-
-            <div class="success-box">
-                <h4>Security Measures:</h4>
-                <ul>
-                    <li>Firebase Security Rules prevent unauthorized access</li>
-                    <li>SSL/TLS encryption for all data transmission</li>
-                    <li>Regular security updates and patches</li>
-                    <li>No storage of exact GPS coordinates</li>
-                </ul>
-            </div>
-
-            <h3>Your Privacy Rights</h3>
-            
-            <h4>Access and Control</h4>
-            <ul>
-                <li><strong>View Your Data:</strong> All your collection data is accessible within the App</li>
-                <li><strong>Edit Information:</strong> Update or modify your collection data at any time</li>
-                <li><strong>Delete Data:</strong> Remove individual items or your entire account</li>
-                <li><strong>Export Data:</strong> Use the backup feature to export your collection data</li>
-            </ul>
-
-            <h4>Notification Preferences</h4>
-            <ul>
-                <li>Control which notifications you receive</li>
-                <li>Unsubscribe from all notifications at any time</li>
-                <li>Change your email address</li>
-                <li>Re-subscribe anytime</li>
-            </ul>
-
-            <h4>Location Permissions</h4>
-            <ul>
-                <li>Location services are completely optional</li>
-                <li>Revoke location permissions anytime in iOS Settings</li>
-                <li>App functions fully without location access</li>
-            </ul>
-
-            <h4>Account Deletion</h4>
-            <ul>
-                <li>Delete your account permanently through App settings</li>
-                <li>All associated data will be permanently removed</li>
-                <li>This action cannot be undone</li>
-                <li>You can register again with a new account if desired</li>
-            </ul>
-
-            <h3>Data Retention</h3>
-            <ul>
-                <li><strong>Active Accounts:</strong> Data is retained while your account is active</li>
-                <li><strong>Deleted Accounts:</strong> Data is permanently removed within 30 days of account deletion</li>
-                <li><strong>Backups:</strong> Local backups stored on your device remain until you delete them</li>
-                <li><strong>Usage Analytics:</strong> Aggregated, anonymized usage data may be retained for improvement purposes</li>
-            </ul>
-
-            <h3>Children's Privacy</h3>
-            <p>The App is intended for users who are of legal drinking age in their jurisdiction. We do not knowingly collect information from children. If you believe we have collected information from a minor, please contact us immediately.</p>
-
-            <h3>Third-Party Services</h3>
-            
-            <h4>Col Wood's Review Service</h4>
-            <ul>
-                <li>Bourbon names are processed to generate Col Wood's professional reviews</li>
-                <li>No other personal information is shared beyond the bourbon name</li>
-                <li>Reviews are provided "as is" without warranty</li>
-            </ul>
-
-            <h4>Location Services</h4>
-            <ul>
-                <li>Apple Location Services: Used for detecting your general location (city/state)</li>
-                <li>Google Places API: Used for searching nearby businesses</li>
-                <li>Only general location (not exact coordinates) is transmitted</li>
-            </ul>
-
-            <h4>Analytics</h4>
-            <ul>
-                <li>Firebase Analytics: Aggregated usage statistics (no personally identifiable information)</li>
-                <li>Crash Reporting: Error logs to improve App stability</li>
-            </ul>
-
-            <h3>International Users</h3>
-            <p>If you are using the App from outside the United States, please note that your data may be transferred to and stored in the United States. By using the App, you consent to this transfer.</p>
-
-            <h3>Changes to Privacy Policy</h3>
-            <p>We may update this Privacy Policy from time to time. We will notify you of significant changes by:</p>
-            <ul>
-                <li>Posting the updated policy in the App</li>
-                <li>Sending email notifications (if you're registered)</li>
-                <li>Updating the "Last Updated" date</li>
-            </ul>
-            <p>Your continued use of the App after changes constitutes acceptance of the updated policy.</p>
-
-            <h3>Contact Us About Privacy</h3>
-            <p>If you have questions or concerns about this Privacy Policy or our data practices, please contact us through the App's help section or settings.</p>
-
-            <div class="highlight-box">
-                <h4>Your Privacy Matters:</h4>
-                <ul>
-                    <li>We respect your privacy and give you control over your data</li>
-                    <li>We only collect information necessary to provide the App's features</li>
-                    <li>You can delete your account and data at any time</li>
-                    <li>We comply with Apple's privacy requirements and industry standards</li>
-                </ul>
-            </div>
-
-            <hr style="margin: 30px 0; border: none; border-top: 2px solid #D2691E;">
-
-            <h2>💾 Data Management</h2>
-            
-            <h3>Backup & Restore</h3>
-            <ul>
-                <li><strong>Create Backup</strong> - Save your collection locally and to network (if available)
-                    <ul>
-                        <li>Creates local backup in app documents</li>
-                        <li>Automatically attempts network backup to SMB share</li>
-                        <li>Provides share option if network backup unavailable</li>
-                    </ul>
-                </li>
-                <li><strong>Restore from Backup</strong> - Recover data if needed</li>
-                <li><strong>View Backups</strong> - See available backup files
-                    <ul>
-                        <li><strong>Multi-Select Deletion</strong> - Select multiple backup files and delete them at once</li>
-                        <li><strong>File Information</strong> - See backup file names, sizes, and creation dates</li>
-                        <li><strong>Easy Management</strong> - Clean up old backups efficiently</li>
-                    </ul>
-                </li>
-                <li><strong>Report Generation</strong> - Generate Insurance Reports (PDF) and Inventory Reports (CSV)
-                    <ul>
-                        <li><strong>Access:</strong> Tap Account in the bottom toolbar → choose <strong>Backup &amp; Restore</strong> → then use "Generate Insurance Report (PDF)" or "Generate Inventory Report (CSV)"</li>
-                        <li><strong>Sharing:</strong> Share via Messages, email, AirDrop, or save to Files</li>
-                    </ul>
-                </li>
-            </ul>
-
-            <hr style="margin: 30px 0; border: none; border-top: 2px solid #D2691E;">
-
-            <h2>🆘 Help & Support</h2>
-            
-            <h3>Getting Help</h3>
-            <ul>
-                <li><strong>Help Button</strong> (❓) - Access assistance anytime</li>
-                <li><strong>In-App Tips</strong> - Contextual help throughout the app</li>
-                <li><strong>Settings</strong> - Comprehensive app configuration</li>
-            </ul>
-
-            <h3>Common Questions</h3>
-            
-            <div class="faq-item">
-                <div class="faq-question">Q: How do I change my notification preferences?</div>
-                <div class="faq-answer">A: Tap the Account button in the bottom toolbar, then tap <strong>Notifications &amp; preferences</strong> in the Account &amp; Status sheet.</div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">Q: Why don't I see the Help button?</div>
-                <div class="faq-answer">A: The Help button (?) is only shown in the bottom bar when you are in <strong>Collection</strong> vault. In Tasting or Hunt, the bar does not show Help. Switch to Collection via the Modes button (Modes &amp; Tools → Switch Vault → Collection) to open the User's Guide.</div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">Q: Can I use the app without sharing my location?</div>
-                <div class="faq-answer">A: Yes! Location is optional. You can decline and still enjoy all other features.</div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">Q: How do I backup my collection?</div>
-                <div class="faq-answer">A: Tap the Account button in the bottom toolbar, then tap <strong>Backup &amp; Restore</strong> in the Account &amp; Status sheet. From there choose "Create Backup". The app will create both a local backup and attempt to backup to your network location (if available). If network backup isn't available, you can use the "Share Backup File" option to manually save it to your network drive via the Files app.</div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">Q: What if I want to stop receiving notifications?</div>
-                <div class="faq-answer">A: Tap Account in the bottom toolbar, then tap <strong>Notifications &amp; preferences</strong>. From there you can unsubscribe from all or adjust individual preferences.</div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">Q: How do I delete my account?</div>
-                <div class="faq-answer">A: Tap Account in the bottom toolbar, then tap <strong>Notifications &amp; preferences</strong>. Account deletion is available there (⚠️ cannot be undone).</div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">Q: What happens after I delete my account?</div>
-                <div class="faq-answer">A: Your account data is completely removed, and you'll see a "Register New Account" option to start fresh</div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">Q: Can I re-register after unsubscribing?</div>
-                <div class="faq-answer">A: Yes! Use the "Change Email" button to edit your email, or "Start Over" to clear fields and re-enter</div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">Q: Why do I need to enter my email twice during registration?</div>
-                <div class="faq-answer">A: This prevents typos and ensures you receive important notifications. Both fields must match exactly.</div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">Q: How do I get the Col's bourbon reviews?</div>
-                <div class="faq-answer">A: Enter a bourbon name in the Name field, then tap the "Col Wood's Professional Review" button. Choose whether to copy the review to your Review and Rating field or just close the popup.</div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">Q: Why are location search results more focused now?</div>
-                <div class="faq-answer">A: We've implemented a 2-city-block radius (400 meters) to ensure all results are within walking distance and eliminate businesses that are miles away.</div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">Q: What happened to the "Flavor Profile" field?</div>
-                <div class="faq-answer">A: We've renamed it to "Review and Rating" to better reflect its purpose and accommodate both the Col's reviews and your personal tasting notes.</div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">Q: How does the location caching work?</div>
-                <div class="faq-answer">A: Location search results are cached for 30 minutes to provide consistent, reliable listings and reduce unnecessary API calls.</div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">Q: How does the vault / mode system work?</div>
-                <div class="faq-answer">A: Collection, Tasting, and Hunt are three vaults on one screen. Tap <strong>Modes</strong> in the bottom toolbar to open the Modes &amp; Tools sheet. Under <strong>Switch Vault</strong>, tap Collection, Tasting, or Hunt. The header and list update for the active vault. The <strong>Help</strong> button (?) only appears in the bar when you are in Collection; in Tasting or Hunt, switch to Collection via Modes to open the User's Guide.</div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">Q: How do I add items in different modes?</div>
-                <div class="faq-answer">A: The + button dynamically changes its title based on the current mode: "Add Bourbon" in Collection mode, "Add Tasting" in Tastings mode, and "Add Hunt" in Hunt mode. Tap the + button to add items to the active mode.</div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">Q: What is BourbonReader?</div>
-                <div class="faq-answer">A: BourbonReader is an AI-powered label scanner that extracts comprehensive information from bottle label images, including brand, proof, ABV, mashbill, bottling info, and more. It's available in Add Bourbon, Add Tasting, and Add Hunt screens.</div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">Q: How do I use BourbonReader?</div>
-                <div class="faq-answer">A: Take or select a photo of the bottle label, then tap the "BourbonReader" button. The AI will analyze the image and automatically populate fields with extracted information. Review and edit as needed.</div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">Q: What do the Open/Closed badges mean on Hunt items?</div>
-                <div class="faq-answer">A: Each hunt displays a status badge: 🟢 OPEN (green) means the hunt is still active, and ⚫ CLOSED (gray) means the hunt has been completed, typically after adding to collection.</div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">Q: What happens when I add a Hunt to Collection?</div>
-                <div class="faq-answer">A: When you tap "Add to Collection" from Hunt Details, you'll be prompted to either "Mark as Closed" or "Keep Open". The bourbon name, store, price, proof, and ABV are automatically migrated to the Add Bourbon screen.</div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question">Q: Can I delete multiple backup files at once?</div>
-                <div class="faq-answer">A: Yes! When viewing backups, you can select multiple files and delete them all at once using the multi-select deletion feature.</div>
-            </div>
-
-
-
-            <hr style="margin: 30px 0; border: none; border-top: 2px solid #D2691E;">
-
-            <h2>🎯 Tips for Best Experience</h2>
-            
-            <h3>Getting Started</h3>
-            <ol>
-                <li><strong>Complete Registration</strong> - Get the most out of notifications</li>
-                <li><strong>Add Your Collection</strong> - Start with a few favorites</li>
-                <li><strong>Set Location</strong> - Discover local bourbon events</li>
-                <li><strong>Customize Preferences</strong> - Make the app work for you</li>
-            </ol>
-
-            <h3>Daily Use</h3>
-            <ul>
-                <li><strong>Regular Updates</strong> - Add new acquisitions</li>
-                <li><strong>Tasting Notes</strong> - Record your experiences</li>
-                <li><strong>Check Notifications</strong> - Stay informed about events</li>
-                <li><strong>Backup Regularly</strong> - Protect your data</li>
-            </ul>
-
-            <h3>Advanced Features</h3>
-            <ul>
-                <li><strong>Grid/List Views</strong> - Switch based on your preference</li>
-                <li><strong>Sorting Options</strong> - Organize by different criteria</li>
-                <li><strong>Search Function</strong> - Find specific bourbons quickly</li>
-                <li><strong>Photo Management</strong> - Document your collection visually</li>
-            </ul>
-
-            <hr style="margin: 30px 0; border: none; border-top: 2px solid #D2691E;">
-
-            <h2>🔄 Recent Updates</h2>
-            
-            <h3>New in 2.8.5 (UI &amp; Navigation)</h3>
-            <div class="feature-list">
-                <ul>
-                    <li><strong>🔀 Unified Bottom Toolbar</strong> – Account, Modes, View, Help, Add</li>
-                    <li><strong>🔍 Vault Search Bar</strong> – Filters current vault only</li>
-                    <li><strong>📋 View Options Sheet</strong> – Search, Filter, Sort, List/Grid, Share Open Bottles</li>
-                    <li><strong>📂 Modes Sheet</strong> – Switch vault, Kiosk, Consult the Colonel</li>
-                    <li><strong>❓ Help in Toolbar</strong> – Just left of + button</li>
-                    <li><strong>👤 Account</strong> – Preferences, backup (replaces bell icon)</li>
-                </ul>
-            </div>
-
-            <h3>Existing Features (Still Current)</h3>
-            <ul>
-                <li><strong>Three Vaults</strong> – Collection, Tastings, Hunt; + button label changes by vault</li>
-                <li><strong>BourbonReader</strong> – AI label scanner in Add Bourbon, Add Tasting, Add Hunt</li>
-                <li><strong>Hunt</strong> – Open/closed status; Add to Collection with photo choice and pre-fill</li>
-                <li><strong>Backup</strong> – Multi-select deletion; file names, sizes, creation dates</li>
-                <li><strong>Consult the Colonel</strong> – From Modes sheet</li>
-                <li><strong>Col Wood's Professional Review</strong> – 450-character reviews; 2-city-block location search; enhanced email registration</li>
-            </ul>
-
-            <h3>Technical &amp; Compliance</h3>
-            <div class="success-box">
-                <ul>
-                    <li><strong>Privacy Manifest Compliance</strong> – Apple App Store requirements</li>
-                    <li><strong>Firebase Integration</strong> – Secure cloud storage and authentication</li>
-                    <li><strong>Location Services</strong> – 2-city-block radius, 30-minute caching</li>
-                    <li><strong>Native Auto Layout</strong> – Modern iOS UI</li>
-                </ul>
-            </div>
-
-            <hr style="margin: 30px 0; border: none; border-top: 2px solid #D2691E;">
-
-            <h2>📞 Contact & Feedback</h2>
-            
-            <h3>We Want to Hear From You</h3>
-            <ul>
-                <li><strong>Feature Requests</strong> - Suggest new capabilities</li>
-                <li><strong>Bug Reports</strong> - Help us improve the app</li>
-                <li><strong>General Feedback</strong> - Share your experience</li>
-            </ul>
-
-            <h3>Stay Connected</h3>
-            <ul>
-                <li><strong>Email Updates</strong> - Get notified about new features</li>
-                <li><strong>App Updates</strong> - Latest improvements and fixes</li>
-                <li><strong>Community</strong> - Connect with other bourbon enthusiasts</li>
-            </ul>
-
-            <hr style="margin: 30px 0; border: none; border-top: 2px solid #D2691E;">
-
-            <h2>🎉 Thank You!</h2>
-            <p>Thank you for choosing <strong>My Bourbon Collection</strong>! We're committed to providing you with the best bourbon management experience while respecting your privacy and preferences.</p>
-            <p><strong>Happy collecting and tasting!</strong> 🥃✨</p>
-
-            <hr style="margin: 30px 0; border: none; border-top: 2px solid #D2691E;">
-
-            <div class="version-info">
-                <p><strong>Last Updated:</strong> February 25, 2026</p>
-                <p><strong>Version:</strong> 2.8.5</p>
-                <p><strong>New in 2.8.5:</strong> Bottom toolbar: Account (Account &amp; Status sheet), Modes (Modes &amp; Tools: Switch Vault + Kiosk, Consult the Colonel), View (View options sheet), Help (Collection only), Add. Vault search bar. Help button only visible in Collection vault.</p>
-                <p><strong>All Features:</strong> Three vaults (Collection, Tastings, Hunt), vault search bar, View sheet (Search, Filter, Sort, List/Grid, Share Open Bottles), Modes sheet, BourbonReader, Hunt (open/closed, Add to Collection with photo choice and pre-fill), multi-select backup deletion, backup file names/sizes/dates, Consult the Colonel (from Modes), Col Wood's Professional Review, location search (2-city-block), enhanced email registration, backup/restore, location services, notification preferences, account management</p>
-            </div>
-        </div>
+<header id="topbar">
+  <button id="ham" aria-label="Menu"><span></span><span></span><span></span></button>
+  <h1>🥃 My Bourbon Collection <span>— User's Guide</span></h1>
+</header>
+
+<div id="overlay"></div>
+
+<nav id="sidebar">
+  <div class="sb-head"><p>Navigation</p></div>
+  <ul id="navlist">
+    <li><button class="active" data-p="welcome"><span class="ni">🏠</span> Welcome</button></li>
+    <li><button data-p="start"><span class="ni">🚀</span> Getting Started</button></li>
+    <li><button data-p="interface"><span class="ni">📱</span> App Interface</button></li>
+    <li><button data-p="collection"><span class="ni">📚</span> Managing Collection</button></li>
+    <li><button data-p="colonel"><span class="ni">✨</span> Consult the Colonel</button></li>
+    <li><button data-p="tastings"><span class="ni">🍷</span> Tasting Notes</button></li>
+    <li><button data-p="location"><span class="ni">📍</span> Location Features</button></li>
+    <li><button data-p="notifications"><span class="ni">🔔</span> Notifications</button></li>
+    <li><button data-p="data"><span class="ni">💾</span> Data &amp; Backup</button></li>
+    <li><button data-p="faq"><span class="ni">🆘</span> FAQ &amp; Help</button></li>
+    <li><button data-p="updates"><span class="ni">🔄</span> Recent Updates</button></li>
+    <li><button data-p="legal"><span class="ni">📄</span> Terms &amp; Privacy</button></li>
+  </ul>
+</nav>
+
+<main id="main">
+  <div id="hero">
+    <span class="hico">🥃</span>
+    <h2>My Bourbon Collection — User's Guide</h2>
+    <div class="qw">
+      <blockquote>"A good bourbon should make you smile, whether it's from the taste or the memories it brings back. That's what this whole collection business is about, isn't it?"</blockquote>
+      <cite>— Colonel Wood</cite>
+    </div>
+  </div>
+
+  <div id="content">
+
+    <div class="panel active" id="p-welcome">
+      <h2>🏠 Welcome</h2>
+      <p class="sub">Your personal digital companion for bourbon collecting</p>
+      <p><strong>My Bourbon Collection</strong> is your personal digital companion for managing and tracking your bourbon collection, tastings, and discovering new releases. Use the <strong>☰ menu</strong> in the top-left corner to navigate this guide.</p>
+      <div class="fg">
+        <div class="fi"><div class="fic">📚</div><div class="fit"><strong>Collection</strong><span>Track owned bottles, ratings &amp; value</span></div></div>
+        <div class="fi"><div class="fic">🍷</div><div class="fit"><strong>Tastings</strong><span>Record experiences &amp; flavor notes</span></div></div>
+        <div class="fi"><div class="fic">🔍</div><div class="fit"><strong>Hunt</strong><span>Spot bottles in stores, bars &amp; events</span></div></div>
+        <div class="fi"><div class="fic">✨</div><div class="fit"><strong>Colonel Wood</strong><span>AI-powered reviews &amp; picks</span></div></div>
+        <div class="fi"><div class="fic">📍</div><div class="fit"><strong>Location</strong><span>Find nearby stores &amp; tasting events</span></div></div>
+        <div class="fi"><div class="fic">💾</div><div class="fit"><strong>Backup</strong><span>Keep your collection safe</span></div></div>
+      </div>
     </div>
 
-    <a href="#" class="back-to-top" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">↑</a>
+    <div class="panel" id="p-start">
+      <h2>🚀 Getting Started</h2>
+      <p class="sub">First launch, registration, and setup</p>
+      <h3>First Launch</h3>
+      <ol class="steps">
+        <li><strong>Launch Screen</strong> — Bourbon-themed welcome experience</li>
+        <li><strong>Permissions</strong> — Camera, location, photo library, and push notifications</li>
+        <li><strong>Email Registration</strong> — Optional: stay in the loop with bourbon news and events</li>
+      </ol>
+      <h3>Email Registration</h3>
+      <div class="card cb">
+        <h4>Why Register?</h4>
+        <ul>
+          <li>App updates and new feature announcements</li>
+          <li>Alerts about bourbon tastings in your area</li>
+          <li>New release notifications from favorite distilleries</li>
+          <li>Monthly reminders and exclusive content</li>
+        </ul>
+      </div>
+      <h4>Registration Process</h4>
+      <ul>
+        <li><strong>Double Email Entry</strong> — Enter your email twice to prevent typos; both fields must match</li>
+        <li><strong>Real-time Validation</strong> — Visual feedback when emails match</li>
+        <li><strong>Change Email</strong> — Edit your address if needed</li>
+        <li><strong>Start Over</strong> — Clear both fields for fresh input</li>
+        <li><strong>Skip for Now</strong> — Register anytime later; app reminds you every 30 days</li>
+      </ul>
+      <div class="card ca"><p style="margin:0;font-size:.9rem;font-family:Arial,sans-serif;">Push notification permission is requested at first launch. You can change this anytime in <strong>iOS Settings</strong>.</p></div>
+    </div>
 
-    <script>
-        // Smooth scrolling for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
+    <div class="panel" id="p-interface">
+      <h2>📱 App Interface</h2>
+      <p class="sub">Bottom toolbar, vaults, search, and navigation</p>
+      <h3>Three Vaults</h3>
+      <p>The app uses a <strong>unified interface</strong> with three vaults. Switch via <strong>Modes</strong> in the bottom toolbar.</p>
+      <div class="fg">
+        <div class="fi"><div class="fic">📚</div><div class="fit"><strong>Collection</strong><span>Owned bottles, stats, filters, list/grid, estimated value</span></div></div>
+        <div class="fi"><div class="fic">🍷</div><div class="fit"><strong>Tastings</strong><span>Tasting experiences, notes, ratings</span></div></div>
+        <div class="fi"><div class="fic">🔍</div><div class="fit"><strong>Hunt</strong><span>Spotted bottles with photos, prices, open/closed status</span></div></div>
+      </div>
+      <h3>Bottom Toolbar (Left → Right)</h3>
+      <ul>
+        <li><strong>Account</strong> — Account &amp; Status sheet: bottle count/value, Notifications &amp; preferences, Backup &amp; Restore</li>
+        <li><strong>Modes</strong> — Modes &amp; Tools sheet: Switch Vault and Tools (Kiosk Mode, Consult the Colonel)</li>
+        <li><strong>View</strong> — View options: Search, Filter, Sort; also List/Grid and Share Open Bottles (Collection only)</li>
+        <li><strong>Help (?)</strong> — Opens this User's Guide. <em>Only visible in Collection vault.</em></li>
+        <li><strong>Add (+)</strong> — "Add Bourbon," "Add Tasting," or "Add Hunt" depending on active vault</li>
+      </ul>
+      <h3>Vault Search Bar</h3>
+      <p>Located directly under the banner — filters the <em>current vault only</em>. Tap × to clear.</p>
+      <div class="card ca"><p style="margin:0;font-size:.9rem;font-family:Arial,sans-serif;"><strong>Tip:</strong> The Help (?) button only appears in <strong>Collection vault</strong>. Switch via Modes → Switch Vault → Collection.</p></div>
+    </div>
 
-        // Show/hide back to top button
-        window.addEventListener('scroll', function() {
-            const backToTop = document.querySelector('.back-to-top');
-            if (window.pageYOffset > 300) {
-                backToTop.style.display = 'block';
-            } else {
-                backToTop.style.display = 'none';
-            }
-        });
-    </script>
+    <div class="panel" id="p-collection">
+      <h2>📚 Managing Your Collection</h2>
+      <p class="sub">Adding, organizing, and editing bottles</p>
+      <h3>Adding a Bourbon</h3>
+      <ol class="steps">
+        <li>Switch to <strong>Collection</strong> vault via Modes if needed</li>
+        <li>Tap the <strong>+</strong> button ("Add Bourbon")</li>
+        <li>Fill in details — required: Name, Proof, and Price</li>
+        <li>Optionally get a review from <strong>Col Wood's Professional Review</strong></li>
+        <li>Save your entry</li>
+      </ol>
+      <h4>All Available Fields</h4>
+      <ul>
+        <li><strong>Name, Proof, Price</strong> — Required</li>
+        <li><strong>ABV, Purchase Location, Size, Purchase Date, Date Opened, Date Emptied</strong></li>
+        <li><strong>Review and Rating</strong> — Tasting notes; can be auto-filled by Col Wood</li>
+        <li><strong>Rating</strong> — Personal 1–5 star rating</li>
+        <li><strong>Fill Level, Notes, Photos</strong></li>
+      </ul>
+      <div class="card cg">
+        <h4>🎯 Col Wood's Professional Review</h4>
+        <ol style="margin:8px 0 0 18px;">
+          <li>Enter the bourbon name in the Name field</li>
+          <li>Tap <strong>"Col Wood's Professional Review"</strong></li>
+          <li>Choose to copy the review into the Review &amp; Rating field, or close</li>
+        </ol>
+        <p style="margin:10px 0 0;font-size:.85rem;color:#2A6020;font-family:Arial,sans-serif;">Reviews are ~250 characters, professional-quality, in Col Wood's Southern gentleman voice.</p>
+      </div>
+      <h3>BourbonReader — AI Label Scanner</h3>
+      <p>Available in Add Bourbon, Add Tasting, and Add Hunt. Photograph a bottle label, tap <strong>BourbonReader</strong>, and the AI extracts brand, proof, ABV, mashbill, and bottling info — then populates the form fields automatically.</p>
+      <h3>Sort &amp; View Options</h3>
+      <ul>
+        <li><strong>Sort by:</strong> Name, Proof, Date, or Rating (ascending or descending)</li>
+        <li><strong>List View</strong> — Compact with detailed information</li>
+        <li><strong>Grid View</strong> — Visual, photo-focused layout</li>
+      </ul>
+    </div>
+
+    <div class="panel" id="p-colonel">
+      <h2>✨ Consult the Colonel</h2>
+      <p class="sub">Personalized recommendations from your collection</p>
+      <p><strong>Consult the Colonel</strong> analyzes your collection and suggests the perfect bottle based on your mood and flavor preferences. Access via <strong>Modes → Tools → Consult the Colonel</strong>.</p>
+      <h3>How to Use</h3>
+      <ol class="steps">
+        <li>Tap <strong>Modes</strong> → <strong>Consult the Colonel</strong></li>
+        <li>Select or type your <strong>mood / occasion</strong> — quick picks: Relaxing, Celebrating, Social Gathering, Quiet Evening, Special Occasion</li>
+        <li>Select or type your <strong>desired flavor profile</strong> — quick picks: Spicy, Sweet, Oak Forward, Smooth, Bold, Vanilla</li>
+        <li>Tap <strong>"Consult the Colonel"</strong> to receive your recommendation</li>
+      </ol>
+      <h3>What You Get</h3>
+      <div class="card ca">
+        <ul>
+          <li>Only considers non-empty bottles in your collection</li>
+          <li>Personalized 1–5 star rating with a ~425-character review in Col Wood's voice</li>
+          <li>Explains <em>why</em> this bourbon fits your mood and flavor request</li>
+          <li>Tap the recommendation to jump to full bottle details</li>
+          <li><strong>Try Again</strong> for a fresh recommendation anytime</li>
+        </ul>
+      </div>
+      <div class="card cg">
+        <h4>Example — Quiet Evening</h4>
+        <p style="margin:4px 0 8px;font-size:.9rem;">Mood: "Relaxing by the fireplace" + Flavor: "Sweet, vanilla-forward" → Smooth, lower-proof sipping bourbon</p>
+        <h4>Example — Special Occasion</h4>
+        <p style="margin:4px 0 0;font-size:.9rem;">Mood: "Celebrating a milestone" + Flavor: "Complex, bold, memorable" → Premium high-proof selection</p>
+      </div>
+    </div>
+
+    <div class="panel" id="p-tastings">
+      <h2>🍷 Tasting Notes &amp; Reviews</h2>
+      <p class="sub">Recording and tracking your tasting experiences</p>
+      <h3>Recording a Tasting</h3>
+      <ol class="steps">
+        <li>Switch to <strong>Tastings</strong> vault, or tap <strong>Add Tasting</strong> from a bourbon's detail view</li>
+        <li>Rate your experience (1–5 stars)</li>
+        <li>Add notes for <strong>Nose</strong> (aroma), <strong>Palate</strong> (taste), <strong>Finish</strong> (aftertaste), and overall impressions</li>
+        <li>Save your tasting entry</li>
+      </ol>
+      <h3>Tasting History</h3>
+      <ul>
+        <li>Track how your palate evolves over time</li>
+        <li>Compare different expressions of the same bourbon</li>
+        <li>Search tastings using the vault search bar</li>
+      </ul>
+      <h3>Hunt Vault</h3>
+      <p>Log bottles you spot in stores, bars, and events before you decide to buy.</p>
+      <ul>
+        <li><strong>🟢 OPEN</strong> — Hunt is still active</li>
+        <li><strong>⚫ CLOSED</strong> — Hunt completed (e.g., added to collection)</li>
+        <li>Tapping <strong>"Add to Collection"</strong> from Hunt Details prompts Mark as Closed or Keep Open, and migrates bourbon name, store, price, proof, and ABV automatically</li>
+      </ul>
+    </div>
+
+    <div class="panel" id="p-location">
+      <h2>📍 Location Features</h2>
+      <p class="sub">Smart local search for stores and events</p>
+      <div class="card ca">
+        <h4>2-City-Block Radius (400m)</h4>
+        <p style="margin:4px 0 0;font-size:.9rem;font-family:Arial,sans-serif;">All location results are within walking distance. Results are cached for 30 minutes for consistent, reliable listings.</p>
+      </div>
+      <h3>What Location Enables</h3>
+      <ul>
+        <li><strong>Purchase Location Search</strong> — Find nearby liquor stores, bars, and restaurants when logging a bottle</li>
+        <li><strong>Local Events</strong> — Discover bourbon tastings near you</li>
+        <li><strong>Auto City/State Detection</strong> — App detects your general area for relevant notifications</li>
+      </ul>
+      <h3>Privacy Notes</h3>
+      <ul>
+        <li>Location is <strong>completely optional</strong> — app works fully without it</li>
+        <li>Only <strong>city/state level</strong> is used — exact GPS coordinates are never stored</li>
+        <li>Revoke permission anytime in <strong>iOS Settings</strong></li>
+        <li>Powered by Apple Location Services and Google Places API</li>
+      </ul>
+    </div>
+
+    <div class="panel" id="p-notifications">
+      <h2>🔔 Notifications &amp; Account</h2>
+      <p class="sub">Managing alerts, emails, and account settings</p>
+      <p>Access from anywhere: tap <strong>Account</strong> in the bottom toolbar → <strong>Notifications &amp; preferences</strong>.</p>
+      <h3>Notification Types</h3>
+      <ul>
+        <li><strong>App Updates, Bourbon Tastings, Bourbon Releases, Monthly Reminders</strong></li>
+        <li><strong>Push Notifications</strong> — In-app alerts</li>
+        <li><strong>Email Notifications</strong> — Email updates</li>
+      </ul>
+      <h3>Controls</h3>
+      <ul>
+        <li><strong>Individual Toggles</strong> — Turn specific types on or off</li>
+        <li><strong>Unsubscribe All / Resubscribe</strong> — Bulk control anytime</li>
+      </ul>
+      <h3>Account Management</h3>
+      <ul>
+        <li>View and update your registered email</li>
+        <li>See registration date and last login</li>
+        <li>Update your current location</li>
+        <li><strong>Delete Account</strong> — Permanent removal; cannot be undone</li>
+      </ul>
+      <div class="card cr"><p style="margin:0;font-size:.9rem;font-family:Arial,sans-serif;"><strong>⚠️ Account deletion is permanent.</strong> All data removed within 30 days. You can register again with a new account.</p></div>
+    </div>
+
+    <div class="panel" id="p-data">
+      <h2>💾 Data &amp; Backup</h2>
+      <p class="sub">Backing up, restoring, and exporting your collection</p>
+      <p>Access via <strong>Account</strong> (bottom toolbar) → <strong>Backup &amp; Restore</strong>.</p>
+      <h3>Backup Options</h3>
+      <ul>
+        <li><strong>Create Backup</strong> — Saves locally and attempts network backup to SMB share. If unavailable, share manually via Files app.</li>
+        <li><strong>Restore from Backup</strong> — Recover your collection from any saved backup</li>
+        <li><strong>View Backups</strong> — See file names, sizes, dates; multi-select deletion to clean up old files</li>
+      </ul>
+      <h3>Report Generation</h3>
+      <div class="card ca">
+        <ul>
+          <li><strong>Insurance Report (PDF)</strong> — Document your collection's value</li>
+          <li><strong>Inventory Report (CSV)</strong> — Spreadsheet-friendly full export</li>
+        </ul>
+        <p style="margin:10px 0 0;font-size:.85rem;font-family:Arial,sans-serif;">Share via Messages, email, AirDrop, or save to Files.</p>
+      </div>
+    </div>
+
+    <div class="panel" id="p-faq">
+      <h2>🆘 FAQ &amp; Help</h2>
+      <p class="sub">Tap any question to expand the answer</p>
+
+      <div class="faq-item"><button class="fq">Why don't I see the Help button?<span class="fa-arr">▼</span></button><div class="fa">The Help (?) button only appears in <strong>Collection vault</strong>. Switch via Modes → Switch Vault → Collection.</div></div>
+      <div class="faq-item"><button class="fq">How do I change notification preferences?<span class="fa-arr">▼</span></button><div class="fa">Tap <strong>Account</strong> in the bottom toolbar → <strong>Notifications &amp; preferences</strong>.</div></div>
+      <div class="faq-item"><button class="fq">How do I back up my collection?<span class="fa-arr">▼</span></button><div class="fa">Tap <strong>Account</strong> → <strong>Backup &amp; Restore</strong> → "Create Backup." The app creates a local backup and attempts a network backup. If unavailable, use "Share Backup File" to save manually via Files app.</div></div>
+      <div class="faq-item"><button class="fq">How do I use Col Wood's reviews?<span class="fa-arr">▼</span></button><div class="fa">Enter a bourbon name, tap <strong>"Col Wood's Professional Review,"</strong> then choose to copy the review into the Review &amp; Rating field or close the popup.</div></div>
+      <div class="faq-item"><button class="fq">Can I use the app without sharing my location?<span class="fa-arr">▼</span></button><div class="fa">Yes! Location is entirely optional. All other features work fully without it.</div></div>
+      <div class="faq-item"><button class="fq">How do I delete my account?<span class="fa-arr">▼</span></button><div class="fa">Tap <strong>Account</strong> → <strong>Notifications &amp; preferences</strong>. Account deletion is available there. ⚠️ This cannot be undone.</div></div>
+      <div class="faq-item"><button class="fq">What happened to the "Flavor Profile" field?<span class="fa-arr">▼</span></button><div class="fa">It's been renamed to <strong>"Review and Rating"</strong> to accommodate both Col Wood's reviews and your personal tasting notes.</div></div>
+      <div class="faq-item"><button class="fq">How does the vault / mode system work?<span class="fa-arr">▼</span></button><div class="fa">Collection, Tasting, and Hunt are three vaults on one screen. Tap <strong>Modes</strong> → <strong>Switch Vault</strong> to change between them. The header, list, and + button label all update accordingly.</div></div>
+      <div class="faq-item"><button class="fq">What are the Open/Closed badges on Hunt items?<span class="fa-arr">▼</span></button><div class="fa">🟢 <strong>OPEN</strong> — hunt is still active. ⚫ <strong>CLOSED</strong> — hunt is complete, typically after adding to collection.</div></div>
+      <div class="faq-item"><button class="fq">What happens when I add a Hunt to Collection?<span class="fa-arr">▼</span></button><div class="fa">Tap "Add to Collection" from Hunt Details. Choose Mark as Closed or Keep Open. Bourbon name, store, price, proof, and ABV are automatically migrated to the Add Bourbon screen.</div></div>
+      <div class="faq-item"><button class="fq">What is BourbonReader?<span class="fa-arr">▼</span></button><div class="fa">An AI-powered label scanner in Add Bourbon, Add Tasting, and Add Hunt. Photograph a label, tap BourbonReader, and the AI extracts brand, proof, ABV, mashbill, and bottling info — then auto-populates the form.</div></div>
+      <div class="faq-item"><button class="fq">How does location caching work?<span class="fa-arr">▼</span></button><div class="fa">Search results are cached for 30 minutes for consistent listings and fewer API calls. The same businesses appear reliably throughout a session.</div></div>
+      <div class="faq-item"><button class="fq">Can I delete multiple backup files at once?<span class="fa-arr">▼</span></button><div class="fa">Yes! In View Backups, use multi-select to choose multiple files and delete them all at once.</div></div>
+      <div class="faq-item"><button class="fq">Why do I enter my email twice during registration?<span class="fa-arr">▼</span></button><div class="fa">This prevents typos and ensures you receive important notifications. Both fields must match exactly before proceeding.</div></div>
+    </div>
+
+    <div class="panel" id="p-updates">
+      <h2>🔄 Recent Updates</h2>
+      <p class="sub">What's new in version 2.8.7</p>
+      <div class="vb"><p><strong>Version 2.8.7</strong> — Last Updated March 3, 2026</p></div>
+      <h3>New in 2.8.7 — UI &amp; Navigation</h3>
+      <div class="card cb">
+        <ul>
+          <li><strong>🔀 Unified Bottom Toolbar</strong> — Account, Modes, View, Help, Add</li>
+          <li><strong>🔍 Vault Search Bar</strong> — Filters current vault only</li>
+          <li><strong>📋 View Options Sheet</strong> — Search, Filter, Sort, List/Grid, Share Open Bottles</li>
+          <li><strong>📂 Modes Sheet</strong> — Switch Vault, Kiosk Mode, Consult the Colonel</li>
+          <li><strong>❓ Help in Toolbar</strong> — Collection vault only, just left of + button</li>
+          <li><strong>👤 Account</strong> — Preferences and backup (replaces bell icon)</li>
+        </ul>
+      </div>
+      <h3>Existing Features</h3>
+      <ul>
+        <li><strong>Three Vaults</strong> — Collection, Tastings, Hunt; + button label changes per vault</li>
+        <li><strong>BourbonReader</strong> — AI label scanner in all three Add screens</li>
+        <li><strong>Hunt</strong> — Open/closed status; Add to Collection with photo choice and pre-fill</li>
+        <li><strong>Backup</strong> — Multi-select deletion; file names, sizes, creation dates</li>
+        <li><strong>Consult the Colonel, Col Wood's Professional Review</strong></li>
+        <li><strong>Location</strong> — 2-city-block radius, 30-minute caching</li>
+      </ul>
+    </div>
+
+    <div class="panel" id="p-legal">
+      <h2>📄 Terms &amp; Privacy</h2>
+      <p class="sub">Terms of Use and Privacy Policy — Last Updated October 2025</p>
+      <h3>Terms of Use</h3>
+      <h4>Eligibility &amp; Use</h4>
+      <ul>
+        <li>You must be of <strong>legal drinking age</strong> in your jurisdiction</li>
+        <li>You are responsible for maintaining the confidentiality of your account</li>
+        <li>You retain ownership of all data you enter; you grant us a license to store and process it</li>
+        <li>You may not use the app for any illegal purpose</li>
+      </ul>
+      <h4>Disclaimers &amp; Liability</h4>
+      <ul>
+        <li>App is provided "as is" without warranties of any kind</li>
+        <li>Col Wood's reviews are AI-generated and used at your own discretion</li>
+        <li>We are not liable for loss of data, inaccurate reviews, or incorrect location data</li>
+        <li>We may modify these Terms at any time; continued use constitutes acceptance</li>
+      </ul>
+      <hr>
+      <h3>Privacy Policy</h3>
+      <h4>What We Collect</h4>
+      <ul>
+        <li><strong>Personal:</strong> Email (optional), registration date, last login</li>
+        <li><strong>Collection Data:</strong> Bottle info, photos, tasting notes, ratings</li>
+        <li><strong>Location:</strong> City/state only — never exact GPS coordinates</li>
+        <li><strong>Usage:</strong> App stats, crash logs, device type/iOS version</li>
+      </ul>
+      <h4>We Do Not Sell Your Data</h4>
+      <p>We do not sell, rent, or trade your personal information. Data is shared only with trusted service providers (Firebase, Apple Location Services, Google Places API) bound by confidentiality agreements.</p>
+      <h4>Your Rights</h4>
+      <ul>
+        <li>View, edit, and delete your data at any time within the app</li>
+        <li>Export your collection via the backup feature</li>
+        <li>Revoke location permissions anytime in iOS Settings</li>
+        <li>Delete your account permanently (data removed within 30 days)</li>
+      </ul>
+      <div class="card ca"><p style="margin:0;font-size:.9rem;font-family:Arial,sans-serif;">The app is intended for users of legal drinking age. We do not knowingly collect information from children.</p></div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+(function(){
+  var ham=document.getElementById('ham'),
+      sb=document.getElementById('sidebar'),
+      ov=document.getElementById('overlay'),
+      btns=document.querySelectorAll('#navlist button'),
+      panels=document.querySelectorAll('.panel');
+
+  function open(){ sb.classList.add('open'); ov.classList.add('on'); ham.classList.add('open'); }
+  function close(){ sb.classList.remove('open'); ov.classList.remove('on'); ham.classList.remove('open'); }
+
+  ham.addEventListener('click',function(){ sb.classList.contains('open')?close():open(); });
+  ov.addEventListener('click',close);
+
+  btns.forEach(function(b){
+    b.addEventListener('click',function(){
+      btns.forEach(function(x){x.classList.remove('active');});
+      b.classList.add('active');
+      panels.forEach(function(p){p.classList.remove('active');});
+      var t=document.getElementById('p-'+b.getAttribute('data-p'));
+      if(t) t.classList.add('active');
+      close();
+      window.scrollTo({top:document.getElementById('hero').offsetHeight+58,behavior:'smooth'});
+    });
+  });
+
+  document.querySelectorAll('.fq').forEach(function(b){
+    b.addEventListener('click',function(){
+      var a=b.nextElementSibling, isOpen=a.classList.contains('open');
+      document.querySelectorAll('.fa').forEach(function(x){x.classList.remove('open');});
+      document.querySelectorAll('.fq').forEach(function(x){x.classList.remove('open');});
+      if(!isOpen){ a.classList.add('open'); b.classList.add('open'); }
+    });
+  });
+})();
+</script>
 </body>
 </html>
