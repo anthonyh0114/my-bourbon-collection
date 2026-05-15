@@ -1,1 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Bourbon Collection – User’s Guide</title>
+  <script>
+    // Defensive cleanup: if this file is ever concatenated with another document,
+    // strip stray nodes after the root document element so the page stays valid.
+    (function () {
+      try {
+        const root = document.documentElement;
+        let n = root.nextSibling;
+        while (n) {
+          const next = n.nextSibling;
+          if (n !== document.doctype) document.removeChild(n);
+          n = next;
+        }
+      } catch (_) {}
+    })();
+  </script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      min-height: 100vh;
+    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    .header {
+      background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+      color: white;
+      padding: 40px 20px;
+      text-align: center;
+      border-radius: 15px;
+      margin-bottom: 30px;
+      box-shadow: 0 8px 32px rgba(139, 69, 19, 0.3);
+    }
+    .header h1 {
+      font-size: 2.4rem;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+    .header p { font-size: 1.15rem; opacity: 0.92; max-width: 900px; margin: 0 auto; }
+    .content {
+      background: white;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+      margin-bottom: 30px;
+    }
+    h2 {
+      color: #8B4513;
+      font-size: 1.8rem;
+      margin: 32px 0 16px 0;
+      padding-bottom: 10px;
+      border-bottom: 3px solid #D2691E;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      scroll-margin-top: 18px;
+    }
+    h3 {
+      color: #A0522D;
+      font-size: 1.35rem;
+      margin: 26px 0 12px 0;
+      padding-left: 10px;
+      border-left: 4px solid #D2691E;
+    }
+    h4 {
+      color: #CD853F;
+      font-size: 1.1rem;
+      margin: 18px 0 8px 0;
+    }
+    p { margin-bottom: 14px; font-size: 1rem; }
+    ul, ol { margin: 12px 0 12px 26px; }
+    li { margin-bottom: 8px; }
+    hr { margin: 30px 0; border: none; border-top: 2px solid #D2691E; }
+    .highlight-box {
+      background: linear-gradient(135deg, #FFF8DC 0%, #F5F5DC 100%);
+      border: 2px solid #D2691E;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 18px 0;
+    }
+    .feature-list {
+      background: linear-gradient(135deg, #F0F8FF 0%, #E6F3FF 100%);
+      border: 2px solid #4682B4;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 18px 0;
+    }
+    .warning-box {
+      background: linear-gradient(135deg, #FFF5EE 0%, #FFE4E1 100%);
+      border: 2px solid #FF6347;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 18px 0;
+    }
+    .faq-item {
+      background: #f8f9fa;
+      border: 1px solid #dee2e6;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 14px 0;
+    }
+    .faq-question { font-weight: bold; color: #8B4513; margin-bottom: 10px; }
+    .faq-answer { color: #555; }
+    .version-info {
+      background: linear-gradient(135deg, #E6E6FA 0%, #F0F8FF 100%);
+      border: 2px solid #9370DB;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 18px 0;
+      text-align: center;
+    }
+    .pill {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      border: 1px solid #D2691E;
+      background: #FFF8DC;
+      color: #8B4513;
+      margin: 0 4px;
+      white-space: nowrap;
+    }
+    code {
+      background: #f2f3f5;
+      padding: 2px 6px;
+      border-radius: 6px;
+      border: 1px solid #e3e6ea;
+      font-size: 0.92em;
+    }
+    .toc {
+      background: linear-gradient(135deg, #F0F8FF 0%, #E6F3FF 100%);
+      border: 2px solid #4682B4;
+      border-radius: 10px;
+      padding: 18px 18px 10px 18px;
+      margin: 18px 0 26px 0;
+    }
+    .toc ul { margin: 10px 0 0 20px; }
+    .toc a { color: #2F5F88; text-decoration: none; }
+    .toc a:hover { text-decoration: underline; }
+
+    .back-to-top {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #8B4513;
+      color: white;
+      padding: 15px;
+      border-radius: 50%;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+      display: none;
+      z-index: 800;
+    }
+    .back-to-top:hover { background: #A0522D; transform: translateY(-2px); }
+
+    .hamburger-btn {
+      position: fixed;
+      top: 18px;
+      left: 18px;
+      z-index: 1001;
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.35);
+      background: rgba(20, 20, 20, 0.55);
+      color: white;
+      font-size: 22px;
+      line-height: 1;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.25);
+    }
+    .hamburger-btn:hover { background: rgba(20, 20, 20, 0.7); }
+    .drawer-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.35);
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 160ms ease;
+    }
+    .drawer-overlay.open { opacity: 1; pointer-events: auto; }
+    .drawer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: min(340px, 86vw);
+      background: rgba(255,255,255,0.98);
+      border-right: 1px solid rgba(0,0,0,0.08);
+      z-index: 1002;
+      transform: translateX(-105%);
+      transition: transform 200ms ease;
+      box-shadow: 10px 0 30px rgba(0,0,0,0.18);
+      display: flex;
+      flex-direction: column;
+    }
+    .drawer.open { transform: translateX(0); }
+    .drawer-header {
+      padding: 18px 18px 10px 18px;
+      background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+      color: white;
+    }
+    .drawer-header .title { font-size: 1.05rem; font-weight: 700; margin-bottom: 4px; }
+    .drawer-header .subtitle { font-size: 0.9rem; opacity: 0.92; }
+    .drawer-body { padding: 10px 12px 16px 12px; overflow: auto; }
+    .drawer-section-label {
+      margin: 12px 10px 8px 10px;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #6c757d;
+    }
+    .drawer a {
+      display: block;
+      padding: 10px 12px;
+      margin: 4px 6px;
+      border-radius: 10px;
+      text-decoration: none;
+      color: #2f3b45;
+      border: 1px solid rgba(0,0,0,0.06);
+      background: #fff;
+    }
+    .drawer a:hover {
+      border-color: rgba(210,105,30,0.45);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.06);
+    }
+
+    @media (max-width: 768px) {
+      .container { padding: 10px; }
+      .content { padding: 20px; }
+      .header h1 { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+  <button class="hamburger-btn" id="hamburgerBtn" aria-label="Open menu" aria-controls="drawerNav" aria-expanded="false">&#9776;</button>
+  <div class="drawer-overlay" id="drawerOverlay" aria-hidden="true"></div>
+  <nav class="drawer" id="drawerNav" aria-label="User guide menu">
+    <div class="drawer-header">
+      <div class="title">My Bourbon Collection</div>
+      <div class="subtitle">User’s Guide menu</div>
+    </div>
+    <div class="drawer-body">
+      <div class="drawer-section-label">Jump to section</div>
+      <div id="drawerLinks"></div>
+      <div class="drawer-section-label">Quick actions</div>
+      <a href="#top" data-close-drawer="true">Back to top</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="header">
+      <a id="top"></a>
+      <h1>&#x1F943; My Bourbon Collection</h1>
+      <p>A practical guide to Collection, Tasting, and Hunt vaults — sharing, backup, reports, and Kiosk Mode. Tap &#9776; (top left) to jump around.</p>
+    </div>
+
+    <div class="content">
+      <div class="highlight-box">
+        <p style="font-size: 1.05rem; font-style: italic; text-align: center; color: #8B4513; margin: 0;">
+          <strong>“A good bourbon should make you smile, whether it’s from the taste or the memories it brings back.”</strong>
+        </p>
+        <p style="text-align: center; margin-top: 12px; color: #A0522D;">— Colonel Wood</p>
+      </div>
+
+      <h2 id="welcome">&#x1F4F1; Welcome</h2>
+      <p><strong>My Bourbon Collection</strong> organizes your bourbon life in three vaults:</p>
+      <ul>
+        <li><strong>Collection</strong> <span class="pill">your bottles</span></li>
+        <li><strong>Tasting</strong> <span class="pill">your tastings</span></li>
+        <li><strong>Hunt</strong> <span class="pill">availability sightings</span></li>
+      </ul>
+      <p><strong>Infinity Bottle</strong> blending is <strong>not</strong> part of the current release; if you see a placeholder, a future update will enable it.</p>
+
+      <div class="toc">
+        <h3>In this guide</h3>
+        <ul>
+          <li><a href="#welcome">Welcome</a></li>
+          <li><a href="#getting-started">Getting started</a></li>
+          <li><a href="#navigation">Navigation, Account, and View menu</a></li>
+          <li><a href="#collection">Collection vault</a></li>
+          <li><a href="#tasting">Tasting vault</a></li>
+          <li><a href="#hunt">Hunt vault</a></li>
+          <li><a href="#sharing">Sharing</a></li>
+          <li><a href="#drafts">Save for later (drafts)</a></li>
+          <li><a href="#data">Data management</a></li>
+          <li><a href="#colonel">Consult the Colonel</a></li>
+          <li><a href="#kiosk">Kiosk mode</a></li>
+          <li><a href="#tips">Tips and troubleshooting</a></li>
+          <li><a href="#privacy">Privacy (summary)</a></li>
+          <li><a href="#thank-you">Thank you</a></li>
+        </ul>
+      </div>
+
+      <h2 id="getting-started">&#x1F680; Getting started</h2>
+      <h3>First launch</h3>
+      <ol>
+        <li><strong>Permissions screen</strong> — On first launch you’ll see a guided permissions screen (no surprise pop-ups). You can grant or skip: Notifications, Camera, Location, and Photos.</li>
+        <li><strong>Email registration</strong> — You may be invited to register your email for updates. It’s optional; you can <strong>Skip for Now</strong> and still use the app. If you skip, the app may remind you again after ~30 days.</li>
+      </ol>
+      <h3>Location</h3>
+      <p>Location is optional. When enabled, nearby business search for purchase or availability locations uses a <strong>short-range</strong> radius so results stay local. You can always type a place manually.</p>
+      <h3>Notifications</h3>
+      <p>Notifications are optional. The app can send reminders and update notices <em>only if</em> you grant permission. If you register your email for updates, the app avoids scheduling the “monthly reminder” notification (email subscribers get updates by email instead).</p>
+
+      <h2 id="navigation">&#x1F9ED; Navigation, Account, and View menu</h2>
+      <h3>Vault banner</h3>
+      <p>At the top you’ll see <strong>MBC: Collection / Tasting / Hunt Vault</strong>. The banner stays <strong>collapsed</strong> while you scroll so the list layout stays stable.</p>
+
+      <h3>Search bar (under the banner)</h3>
+      <p>Filters the <strong>current vault’s list</strong> in place (bottle names, locations, prices in Collection; tasting text in Tasting; hunt fields in Hunt). This is separate from <strong>View → Search</strong> (see below).</p>
+
+      <h3>Bottom bar</h3>
+      <ul>
+        <li><strong>Account</strong> — Status summary, <strong>Notifications &amp; preferences</strong>, <strong>Backup &amp; Restore</strong>, <strong>Help</strong> (opens this guide), badge unlocks (tap to share), and in-app collection sharing (username, directory visibility, identity tag, inbox) when enabled.</li>
+        <li><strong>Modes</strong> — Switch vault; open <strong>Kiosk Mode</strong> and <strong>Consult the Colonel</strong>.</li>
+        <li><strong>View</strong> — Context-specific actions (see next section).</li>
+        <li><strong>Add (+)</strong> — Adds a bottle, tasting, or hunt depending on the active vault.</li>
+      </ul>
+      <p>When drafts exist, you may see <strong>Complete (N)</strong> to finish “save for later” entries.</p>
+
+      <h3>View menu (sheet)</h3>
+      <ul>
+        <li><strong>Search</strong> — Opens the full <strong>Search</strong> screen (bourbon search, including flavor search where available).</li>
+        <li><strong>Sort</strong> — Available in <strong>all three vaults</strong>. Options depend on the vault (see Collection / Tasting / Hunt sections).</li>
+        <li><strong>Collection only:</strong> <strong>Filter</strong> (show/hide the status filter row: All / Open / Unopened / Favorites / High Value), <strong>List / Grid</strong>, and <strong>Share open bottles</strong> (QR).</li>
+      </ul>
+
+      <h2 id="collection">&#x1F4DA; Collection vault</h2>
+      <p>Your bottles, photos, lifecycle, notes, estimated value (for supported sizes), and open-bottle sharing.</p>
+
+      <h3>List and grid</h3>
+      <ul>
+        <li><strong>List</strong> — Compact rows, great for sorting and scanning.</li>
+        <li><strong>Grid</strong> — Photo-first browsing.</li>
+        <li>Switch via <strong>View</strong> → List or Grid.</li>
+      </ul>
+
+      <h3>Sort (Collection)</h3>
+      <p>From <strong>View → Sort</strong>: Name (A–Z / Z–A), Proof (low/high), Purchase date (oldest/newest), Rating (low/high, from tasting history tied to collection bottles), plus <strong>Reset</strong> to database order.</p>
+
+      <h3>Filter</h3>
+      <p>After you show the filter row via <strong>View → Filter</strong>, use All, Open, Unopened, Favorites, or High Value. Switching vaults resets the vault search field; returning to Collection with a narrow filter and no matches can look empty until you choose <strong>All</strong>.</p>
+
+      <h3>Add or edit a bottle</h3>
+      <ol>
+        <li>Tap <strong>+</strong> in Collection (or edit from detail).</li>
+        <li>Core fields include name, proof, optional ABV, purchase location, purchase date, price (or gifted), size, lifecycle (date opened / emptied, fill level where applicable), review and rating text, personal notes, and photos.</li>
+      </ol>
+      <div class="feature-list">
+        <h4>Bottle sizes (picker)</h4>
+        <p>Tasting, Shooter (50 ml), 100 ml, 200 ml, 375 ml, 700 ml, 750 ml, 1000 ml, 1500 ml, 1750 ml. Very small formats may limit lifecycle/fill behavior. Estimated value tracking applies to specific larger sizes the app supports (for example 375 ml, 700 ml, 750 ml, 1500 ml, and 1750 ml — not every size in the picker).</p>
+      </div>
+      <p><strong>BourbonReader</strong> (wand) analyzes a clear label photo to help fill the form. <strong>Col Wood’s Professional Review</strong> generates a short review you can copy into your notes (Collection/Tasting add flow — not on Hunt).</p>
+
+      <h3>Share open bottles</h3>
+      <p><strong>View → Share open bottles</strong> (Collection only): QR code and link for bottles that are open (opened, not emptied). Recipients open the list in the app.</p>
+
+      <h2 id="tasting">&#x1F377; Tasting vault</h2>
+      <p>Log where you tasted, what was in the flight, star ratings, nose/palate/finish, and flavor tags.</p>
+      <h3>Add a tasting</h3>
+      <ol>
+        <li>Switch to <strong>Tasting</strong> via <strong>Modes</strong>.</li>
+        <li>Tap <strong>+</strong>, pick date/location, add one or more bourbons (from your collection or as “wild” entries), rate, and add notes.</li>
+      </ol>
+      <h3>Flavor tags and Flavor Radar</h3>
+      <p>Tags use categories such as Grain &amp; Cereal, Sweet, Baking Spices, Fruit &amp; Floral, Wood &amp; Earth, with intensity (Subtle / Medium / Strong). They power the <strong>Flavor Radar</strong> on tasting and bottle detail and support <strong>search by flavor</strong> from the Search screen.</p>
+      <h3>Sort (Tasting)</h3>
+      <p><strong>View → Sort</strong>: Name (by bourbons in the tasting), Purchase date (label in the menu; sorts by <strong>tasting date</strong>), Age (days since that tasting date), Rating (overall tasting stars; unrated last). No proof sort (a tasting has no single proof). <strong>Reset</strong> reloads from the database.</p>
+
+      <h2 id="hunt">&#x1F50E; Hunt vault</h2>
+      <p>Quick logs for bottles you spot in the wild — store, bar, or event — with an edit-later workflow when signal is weak.</p>
+      <h3>Add or edit a hunt</h3>
+      <p>The app uses one unified add/edit screen for every vault. For <strong>Hunt</strong>, several Collection-only controls are <strong>removed from the layout</strong> (not merely greyed out):</p>
+      <ul>
+        <li>Col Wood’s Professional Review</li>
+        <li>Purchase date row and thumbs down / OK / thumbs up rating row</li>
+        <li>Date Opened, Date Emptied, fill level (slider and labels), and Personal Notes</li>
+      </ul>
+      <p>You still enter bourbon name, availability location, proof/ABV as needed, price, size, gifted switch, photos, and use <strong>BourbonReader</strong> where appropriate. The hunt record stores its own date when you save.</p>
+      <div class="warning-box">
+        <h4>Weak signal</h4>
+        <p>Take a clear photo and save. Later, open the hunt, tap <strong>Edit</strong>, and run BourbonReader or refine the location on Wi‑Fi.</p>
+      </div>
+      <h3>Sort (Hunt)</h3>
+      <p><strong>View → Sort</strong>: Name, Proof, Purchase date (menu label; sorts by <strong>hunt date</strong>), Age (days since that date). No star-rating sort (hunts don’t use collection rating). <strong>Reset</strong> reloads hunts from the database.</p>
+      <h3>Challenges</h3>
+      <p>The Hunt area can include <strong>Challenges</strong> for themed hunt sets (for example limited releases).</p>
+
+      <h2 id="sharing">&#x1F4E4; Sharing</h2>
+      <h3>Open bottles (QR / link)</h3>
+      <p>From Collection: <strong>View → Share open bottles</strong>. Shows currently open bottles; share QR or copy link.</p>
+      <h3>In-app collection snapshot</h3>
+      <p>From <strong>Account</strong>: choose a username (one-time), optionally enable <strong>Visible in Directory</strong>, and optionally add an <strong>Identity tag</strong> (a short line shown under your username to help friends recognize you). Then use <strong>Send my collection</strong> to deliver a read-only snapshot (open and unopened bottles) to a friend’s <strong>Collection inbox</strong>. This is separate from the open-bottle QR/link.</p>
+      <h3>Badges (shareable)</h3>
+      <p>In <strong>Account</strong>, you’ll see bottle-count badges (10, 25, 50, 100, 250, 500, 1000). When a badge is unlocked, you can tap it to share.</p>
+
+      <h2 id="drafts">&#x1F4DD; Save for later (drafts)</h2>
+      <p>If a network step times out (for example Col Wood review or label analysis), you can <strong>Save for later</strong>. When drafts exist, use <strong>Complete (N)</strong> to finish them.</p>
+
+      <h2 id="data">&#x1F4BE; Data management</h2>
+      <p>Open backup and reports from the <strong>Account</strong> flow (and related controls on the main Collection experience where applicable).</p>
+      <ul>
+        <li><strong>Create backup</strong> / <strong>Restore</strong> / manage backup files.</li>
+        <li><strong>Insurance report (PDF)</strong> and <strong>Inventory report (CSV)</strong>.</li>
+      </ul>
+      <p>From Tasting or Hunt, choosing data backup may prompt you to switch to Collection first — that is intentional.</p>
+
+      <h2 id="colonel">&#x2728; Consult the Colonel</h2>
+      <p>From <strong>Modes → Consult the Colonel</strong>: pick a mood and flavor profile (quick picks or custom text). Colonel Wood suggests a bottle from your <strong>non-empty</strong> collection with a short rationale.</p>
+      <h3>While Colonel Wood thinks</h3>
+      <p>Instead of a plain spinner (when it applies), the app can show a quick <strong>label reel</strong> using up to <strong>25</strong> random bottle photos from your collection. The reel <strong>slows down</strong> after the recommendation is ready. On the last few slowdown steps, if that bottle has a <strong>label photo</strong> saved in the app, the reel <strong>settles on that image</strong> before the loading overlay goes away.</p>
+      <p>The first moment the reel switches to your pick uses a very <strong>short cross-dissolve</strong> (about two tenths of a second). If the reel is not used—for example only one collection photo, or <strong>Reduce Motion</strong> is on in iOS Settings → Accessibility—you’ll see the usual progress indicator; when a label exists, it can <strong>fade in</strong> briefly before the result appears.</p>
+      <p class="highlight-box"><strong>Tip:</strong> Add label photos to more bottles if you want a fuller reel and a clearer “land on the pick” moment.</p>
+
+      <h2 id="kiosk">&#x1F5A5; Kiosk mode</h2>
+      <p>For public or shared devices. Kiosk can limit editing, deletion, and some actions. Enter from <strong>Modes → Kiosk Mode</strong>.</p>
+
+      <h2 id="tips">&#x1F3AF; Tips and troubleshooting</h2>
+      <div class="faq-item">
+        <div class="faq-question">Why didn’t I get the monthly reminder notification?</div>
+        <div class="faq-answer">The monthly reminder is intended for users who <strong>haven’t registered an email</strong>. If you’ve registered, updates are handled by email and the app avoids scheduling that monthly notification. Also confirm notifications are enabled in iOS Settings.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Sort does nothing in Tasting or Hunt.</div>
+        <div class="faq-answer">Use <strong>View → Sort</strong>. Each vault sorts its own list; Reset reloads from the database.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Why doesn’t Hunt show purchase date or bottle lifecycle?</div>
+        <div class="faq-answer">Hunt is a sighting log, not a bottle in your collection. Those fields are hidden on Hunt add/edit so the form matches how hunts are stored.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Where is Help?</div>
+        <div class="faq-answer">Open <strong>Account</strong>, then <strong>Help &amp; User's Guide</strong>. The guide is bundled with the app for your installed version (works offline). The same file is published on GitHub under <strong>docs/3.0.0/</strong> for the web.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">Weak signal at a bar or store?</div>
+        <div class="faq-answer">Create a Hunt with a good photo; edit later on stronger signal.</div>
+      </div>
+
+      <h2 id="privacy">&#x1F512; Privacy (summary)</h2>
+      <ul>
+        <li><strong>Location is optional.</strong></li>
+        <li><strong>Your data stays yours</strong> until you explicitly share (QR/link or in-app send).</li>
+        <li><strong>Notifications are opt-in.</strong> Email registration is optional; if you register, some in-app reminders may be reduced (for example the monthly reminder).</li>
+        <li>Notifications, email, and analytics follow the choices you make in the app and system Settings.</li>
+        <li>You must be of <strong>legal drinking age</strong> in your region.</li>
+      </ul>
+      <p>For full legal text, use the policies linked or shown inside the app where provided.</p>
+
+      <h2 id="thank-you">&#x1F389; Thank you</h2>
+      <p>Thanks for using <strong>My Bourbon Collection</strong>. Happy collecting and tasting.</p>
+
+      <div class="version-info">
+        <p><strong>App version:</strong> 3.0.0</p>
+        <p><strong>Last updated:</strong> May 2026</p>
+        <p><strong>Guide:</strong> Single-document edition (hamburger nav, vault-accurate Hunt and Sort)</p>
+      </div>
+    </div>
+  </div>
+
+  <a href="#top" class="back-to-top" aria-label="Back to top">↑</a>
+
+  <script>
+    (function () {
+      const btn = document.getElementById('hamburgerBtn');
+      const drawer = document.getElementById('drawerNav');
+      const overlay = document.getElementById('drawerOverlay');
+      const linksHost = document.getElementById('drawerLinks');
+
+      function ensureId(el) {
+        if (el.id && el.id.trim().length) return el.id;
+        const base = (el.textContent || 'section')
+          .toLowerCase()
+          .replace(/[\u{1F300}-\u{1FAFF}]/gu, '')
+          .replace(/&/g, 'and')
+          .replace(/[^a-z0-9\s-]/g, '')
+          .trim()
+          .replace(/\s+/g, '-')
+          .replace(/-+/g, '-') || 'section';
+        let candidate = base;
+        let i = 2;
+        while (document.getElementById(candidate)) candidate = `${base}-${i++}`;
+        el.id = candidate;
+        return candidate;
+      }
+
+      function buildLinks() {
+        const headings = Array.from(document.querySelectorAll('h2'));
+        linksHost.innerHTML = '';
+        headings.forEach(h => {
+          const id = ensureId(h);
+          const a = document.createElement('a');
+          a.href = `#${id}`;
+          a.setAttribute('data-close-drawer', 'true');
+          a.textContent = (h.textContent || '').trim();
+          linksHost.appendChild(a);
+        });
+      }
+
+      function openDrawer() {
+        drawer.classList.add('open');
+        overlay.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+      function closeDrawer() {
+        drawer.classList.remove('open');
+        overlay.classList.remove('open');
+        btn.setAttribute('aria-expanded', 'false');
+      }
+      function toggleDrawer() {
+        if (drawer.classList.contains('open')) closeDrawer();
+        else openDrawer();
+      }
+
+      btn.addEventListener('click', toggleDrawer);
+      overlay.addEventListener('click', closeDrawer);
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDrawer(); });
+      drawer.addEventListener('click', (e) => {
+        const t = e.target;
+        if (t && t.getAttribute && t.getAttribute('data-close-drawer') === 'true') closeDrawer();
+      });
+
+      buildLinks();
+    })();
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        const href = this.getAttribute('href');
+        if (!href || href === '#') return;
+        const target = document.querySelector(href);
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+
+    window.addEventListener('scroll', function() {
+      const backToTop = document.querySelector('.back-to-top');
+      if (window.pageYOffset > 300) backToTop.style.display = 'block';
+      else backToTop.style.display = 'none';
+    });
+  </script>
+</body>
+</html>
 
